@@ -50,6 +50,17 @@ app.get("/api/Providers", (req, res) => {
   });
 });
 
+app.get("/api/Categories", (req, res) => {
+  const query = "SELECT * FROM service_web.service_categories"; // כאן תשים את שם הטבלה שלך
+  db.query(query, (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "אירעה שגיאה בשרת" });
+    } else {
+      res.json(results); // שולחים את התוצאות כ-JSON
+    }
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
