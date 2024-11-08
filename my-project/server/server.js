@@ -28,6 +28,8 @@ db.connect((err) => {
   console.log("Connected to MySQL database");
 });
 
+
+
 // Routes
 // app.use('/api/auth', authRoutes(db)); // Pass db to routes
 // app.use('/api/services', servicesRoutes(db));
@@ -37,6 +39,27 @@ db.connect((err) => {
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
+});
+
+app.post("/api/loginUser", (req, res) => {
+  const { email, password } = req.body;
+
+  db.query(
+    "SELECT * FROM service_web.users WHERE email = ?",
+    [email],
+    async (error, results) => {
+      if (
+        results.length === 0 ||
+        !(await bcrypt.compare(password, results[0].password))
+      ) {
+        return res.status(401).send("Invalid credentials");
+      }
+      const token = jwt.sign({ id: results[0].user_id }, "secretkey", {
+        expiresIn: "1h",
+      });
+      res.json({ token, userType: "user" });
+    }
+  );
 });
 
 app.get("/api/Providers", (req, res) => {
@@ -65,3 +88,9 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = db;
+
+
+const authRoutes = require("./routes/authRoutes"); 
+app.use("/api/auth", authRoutes); // הוספת הנתיב לטיפול באימות
