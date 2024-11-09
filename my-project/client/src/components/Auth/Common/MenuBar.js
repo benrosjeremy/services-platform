@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 const MenuBar = ({ userType, user }) => {
   return (
+    
+    
     <nav className="menu-bar">
       <h1 className="logo">My Website</h1>
       {userType === "user" ? (

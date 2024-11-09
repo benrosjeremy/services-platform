@@ -1,9 +1,9 @@
-// LoginPage.js
+
 import React from "react";
 import { Navigate } from "react-router-dom";
 import UserLogin from "../components/Auth/UserLogin";
 import ProviderLogin from "../components/Auth/ProviderLogin";
-import "./LoginPage.css"; // הקובץ שבו יופיע הסגנון
+import "./LoginPage.css"; 
 
 function LoginPage({ onLoginSuccess, userType }) {
   // ניתוב אוטומטי בהתאם לסוג המשתמש
