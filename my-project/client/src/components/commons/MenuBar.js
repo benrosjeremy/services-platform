@@ -1,13 +1,11 @@
 import React from "react";
-import "./MenuBar.css"; // סגנונות נפרדים
+import "./MenuBar.css";
 import { Link } from "react-router-dom";
 
 const MenuBar = ({ userType, user }) => {
   return (
-    
-    
     <nav className="menu-bar">
-      <h1 className="logo">My Website</h1>
+      <h1 className="logo">המקצוען</h1>
       {userType === "user" ? (
         <div className="welcome-message">
           <span>
@@ -18,7 +16,7 @@ const MenuBar = ({ userType, user }) => {
         <span>שלום, {user?.name || "ספק שירות לא מחובר"}</span>
       ) : (
         <div className="welcome-message">
-          <span>ברוך הבא, אנא התחבר</span>
+          {/* <span>ברוך הבא, אנא התחבר</span> */}
         </div>
       )}
       <ul className="menu-items">

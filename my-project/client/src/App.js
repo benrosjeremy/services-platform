@@ -1,65 +1,81 @@
-// App.js
+// // App.js
 import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import UserRegister from "./components/Auth/UserRegister";
-import ProviderRegister from "./components/Auth/ProviderRegister";
-import ProviderHome from "./pages/ProviderHome";
-import UserHome from "./pages/UserHome";
-import LoginPage from "./pages/LoginPage";
-import MenuBar from "./components/Auth/Common/MenuBar";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import UserRegister from "./components/auth/components/UserRegister";
+import ProviderRegister from "./components/auth/components/ProviderRegister";
+import ProviderHome from "./components/home-provider/ProviderHome";
+import UserHome from "./components/home-client/UserHome";
+import LoginPage from "./components/auth/LoginPage";
+import MenuBar from "./components/commons/MenuBar";
+import "./App.css";
 
 function App() {
   const [userType, setUserType] = useState(null);
-  const [user, setUser] = useState(null); // שמירת אובייקט המשתמש
+  const [user, setUser] = useState(null);
 
   const handleLoginSuccess = (type, userData) => {
     setUserType(type);
-    setUser(userData); 
+    setUser(userData);
+    console.log("User data after login:", userData);
+  };
+
+  // פונקציה ליציאה מהמערכת
+  const handleLogout = () => {
+    setUserType(null);
+    setUser(null);
   };
 
   return (
-    <Router>
+    // <Router>
+    <BrowserRouter
+      future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+    >
       <div className="App">
-        {/* הצגת MenuBar בכל הדפים */}
-        <MenuBar userType={userType} user={user} />
-      <Routes>
-        {/* ברירת מחדל - עמוד ההתחברות */}
-        <Route
-          path="/"
-          element={
-            <LoginPage
-              onLoginSuccess={handleLoginSuccess}
-              userType={userType} user={user}
-            />
-          }
-        />
+        <MenuBar userType={userType} user={user} onLogout={handleLogout} />
 
-        {/* מסלולים למשתמשים */}
-        <Route path="/user/register" element={<UserRegister />} />
-        <Route
-          path="/user/home"
-          element={userType === "user" ? <UserHome /> : <Navigate to="/" />}
-        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <LoginPage
+                onLoginSuccess={handleLoginSuccess}
+                userType={userType}
+                user={user}
+              />
+            }
+          />
 
-        {/* מסלולים לבעלי מקצוע */}
-        <Route path="/provider/register" element={<ProviderRegister />} />
-        <Route
-          path="/provider/home"
-          element={
-            userType === "provider" ? <ProviderHome /> : <Navigate to="/" />
-          }
-        />
+          {/* מסלולים למשתמשים */}
+          <Route path="/user/register" element={<UserRegister />} />
+          <Route
+            path="/user/home"
+            element={userType === "user" ? <UserHome /> : <Navigate to="/" />}
+          />
 
-        {/* ניתוב לכל שאר העמודים למסך הבית */}
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+          <Route path="/provider/register" element={<ProviderRegister />} />
+          {/* <Route
+            path="/provider/home"
+            element={
+              userType === "provider" ? <ProviderHome /> : <Navigate to="/" />
+            }
+          /> */}
+          <Route
+            path="/provider/home"
+            element={
+              userType === "provider" ? (
+                <ProviderHome provider={user} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          {/* ניתוב לכל שאר העמודים למסך הבית */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
       </div>
-    </Router>
+      {/* </Router> */}
+    </BrowserRouter>
   );
 }
 

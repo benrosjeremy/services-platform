@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-const CategoryList = ({ setCategoryFilter, categories }) => {
+const CategoryList = ({ categoryFilter,setCategoryFilter, categories }) => {
   const handleCategoryChange = (categoryId) => {
     setCategoryFilter(categoryId); // שולחים את ה-ID של הקטגוריה
   };
@@ -22,7 +22,7 @@ const CategoryList = ({ setCategoryFilter, categories }) => {
               className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow w-full"
               style={{
                 backgroundColor:
-                  category.id === setCategoryFilter ? "#e0f7fa" : "", // צבע חלופי כשהכפתור נבחר
+                  category.id === categoryFilter ? "#e0f7fa" : "", // צבע חלופי כשהכפתור נבחר
               }}
             >
               <div className="text-3xl mb-2">{category.icon}</div>

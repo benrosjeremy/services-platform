@@ -1,9 +1,8 @@
-
 import React from "react";
 import { Navigate } from "react-router-dom";
-import UserLogin from "../components/Auth/UserLogin";
-import ProviderLogin from "../components/Auth/ProviderLogin";
-import "./LoginPage.css"; 
+import UserLogin from "./components/UserLogin";
+import ProviderLogin from "./components/ProviderLogin";
+import "./LoginPage.css";
 
 function LoginPage({ onLoginSuccess, userType }) {
   // ניתוב אוטומטי בהתאם לסוג המשתמש
@@ -19,14 +18,18 @@ function LoginPage({ onLoginSuccess, userType }) {
       <h1 className="login-title">ברוכים הבאים! התחברו לחשבון</h1>
       <div className="login-container">
         <div className="login-box">
-          <UserLogin onLoginSuccess={(type, user) => onLoginSuccess(type, user)} />
+          <UserLogin
+            onLoginSuccess={(type, user) => onLoginSuccess(type, user)}
+          />
           <button className="register-link">
             <a href="/user/register">משתמש חדש? הירשם כאן</a>
           </button>
         </div>
 
         <div className="login-box">
-          <ProviderLogin onLoginSuccess={(type, provider) => onLoginSuccess(type, provider)}  />
+          <ProviderLogin
+            onLoginSuccess={(type, provider) => onLoginSuccess(type, provider)}
+          />
           <button className="register-link">
             <a href="/provider/register">בעל מקצוע חדש? הירשם כאן</a>
           </button>
