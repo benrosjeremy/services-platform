@@ -10,7 +10,7 @@ const ProvidersList = ({ categoryFilter }) => {
   useEffect(() => {
     const fetchProviders = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/Providers"); // עדכן את ה-API בהתאם
+        const response = await fetch("http://localhost:5000/api/user/get-providers"); // עדכן את ה-API בהתאם
         if (!response.ok) {
           throw new Error("בעיה בטעינת הנתונים");
         }

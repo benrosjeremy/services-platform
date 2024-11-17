@@ -49,7 +49,13 @@ function App() {
           <Route path="/user/register" element={<UserRegister />} />
           <Route
             path="/user/home"
-            element={userType === "user" ? <UserHome /> : <Navigate to="/" />}
+            element={
+              userType === "user" ? (
+                <UserHome user={user} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
 
           <Route path="/provider/register" element={<ProviderRegister />} />

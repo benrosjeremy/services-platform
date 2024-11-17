@@ -9,7 +9,7 @@ const ProviderRegister = () => {
 
   const handleRegister = async () => {
     try {
-      await axios.post('http://localhost:5000/provider-register', provider);
+      await axios.post('http://localhost:5000/register-provider', provider);
       alert('Registration successful');
     } catch (error) {
       alert('Registration failed');

@@ -108,22 +108,26 @@
 // };
 
 // export default ProviderHome;
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import "./ProviderHome.css";
 
-const ProviderHome = ({provider} ) => {
+const ProviderHome = ({ provider }) => {
   const [requests, setRequests] = useState([]);
-console.log(provider);
+  console.log(provider);
 
   useEffect(() => {
     const loadRequests = async () => {
       console.log("provider id " + provider.id);
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/requests/${provider.id}`
+        const response = await axios.post(
+          "/api/provider/get-service-requests",
+          {
+            providerId: provider.id,
+          }
         );
-        const data = await response.json();
-        setRequests(data);
+        //const data = await response.json();
+        setRequests(response.data);
       } catch (error) {
         console.error("Error loading requests:", error);
       }
@@ -174,9 +178,7 @@ console.log(provider);
 
   return (
     <div className="page-container">
-      <div>
-        {/* {provider.name} - {provider.id} */}
-      </div>
+      <div>{/* {provider.name} - {provider.id} */}</div>
       <h1 className="page-header">בקשות שהתקבלו</h1>
       {requests.map((request) => (
         <div key={request.id} className="request-card">

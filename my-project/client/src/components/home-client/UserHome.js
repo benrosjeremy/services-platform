@@ -5,8 +5,9 @@ import ProvidersList from "./components/ProvidersList";
 import WhyChooseUs from "./components/WhyChooseUs";
 import NewServiceRequestForm from "./components/NewServiceRequestForm";
 // import ".../App.css";
+import axios from "axios";
 
-const UserHome = () => {
+const UserHome = ({ user }) => {
   const [categoryFilter, setCategoryFilter] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [location, setLocation] = useState("");
@@ -15,21 +16,25 @@ const UserHome = () => {
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [requests, setRequests] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const categoriesRes = await fetch(
-          "http://localhost:5000/api/Categories"
+          "http://localhost:5000/api/user/get-categories"
         );
         const categoriesData = await categoriesRes.json();
         setCategories(categoriesData);
 
-        const citiesRes = await fetch("http://localhost:5000/api/Cities");
+        const citiesRes = await fetch(
+          "http://localhost:5000/api/user/get-cities"
+        );
         const citiesData = await citiesRes.json();
         setCities(citiesData);
 
-        const providersRes = await fetch("http://localhost:5000/api/Providers");
+        const providersRes = await fetch(
+          "http://localhost:5000/api/user/get-providers"
+        );
         const providersData = await providersRes.json();
         setProviders(providersData);
       } catch (err) {
@@ -78,34 +83,16 @@ const UserHome = () => {
   //   }
   // };
 
-  const handleServiceRequestSubmit = async (serviceRequestData) => {
+  const handleNewServiceRequest = async (data) => {
     try {
-      console.log("Service request data:", serviceRequestData); // הדפסת הנתונים לפני שליחה
-
-      const response = await fetch(
-        "http://localhost:5000/api/ServiceRequests",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(serviceRequestData),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Server Error:", errorData); // הצגת שגיאת השרת
-        throw new Error(errorData.error || "Unknown error");
-      }
-
-      const serviceRequest = await response.json();
-
-      console.log("Service request created:", serviceRequest); // הצגת תוצאה מוצלחת
-
-      alert("בקשת השירות נשלחה בהצלחה!");
+      data.userId = user.user_id;
+      const response = await axios.post("/api/user/create-service", data);
+      alert("Service request added successfully!");
+      // אחרי יצירת הבקשה, אתה יכול להוסיף את הבקשה לרשימה אם תרצה
+      setRequests((prevRequests) => [...prevRequests, response.data]);
     } catch (err) {
-      console.error("Error submitting service request:", err);
+      console.error(err);
+      alert("Error adding service request.");
     }
   };
 
@@ -133,10 +120,9 @@ const UserHome = () => {
         />
         <ProvidersList categoryFilter={categoryFilter} />
         <NewServiceRequestForm
-          categories={categories}
-          providers={providers}
+          onSubmit={handleNewServiceRequest}
           cities={cities}
-          onSubmit={handleServiceRequestSubmit}
+          categories={categories}
         />
         <WhyChooseUs />
       </div>

@@ -1,55 +1,55 @@
 import React, { useState } from "react";
 
-const NewServiceRequestForm = ({ categories, providers, cities, onSubmit }) => {
+function ServiceRequestForm({ onSubmit, cities, categories }) {
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [images, setImages] = useState([]);
-
-  const handleImageChange = (e) => {
-    setImages([...e.target.files]);
-  };
+  const [cityId, setCityId] = useState("");
+  const [serviceCategoryId, setServiceCategoryId] = useState("");
+  const [providers, setProviders] = useState(""); // A comma-separated list of provider IDs
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({
+
+    // הוצאת הנתונים לשימוש ב- UserHome
+    const serviceRequestData = {
       title,
       details,
-      selectedCity,
-      selectedCategory,
-      images,
-    });
+      cityId,
+      serviceCategoryId,
+      providers: providers.split(",").map((id) => parseInt(id.trim())),
+    };
+
+    // שליחת הנתונים ל-UserHome
+    onSubmit(serviceRequestData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md">
-      <h2 className="text-xl font-bold mb-4">יצירת בקשת שירות חדשה</h2>
-      <div className="mb-4">
-        <label className="block font-medium">כותרת</label>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Title:</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
+          required
         />
       </div>
-      <div className="mb-4">
-        <label className="block font-medium">פירוט</label>
+      <div>
+        <label>Details:</label>
         <textarea
           value={details}
           onChange={(e) => setDetails(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
+          required
         />
       </div>
-      <div className="mb-4">
-        <label className="block font-medium">בחר עיר</label>
+      <div>
+        <label>City:</label>
         <select
-          value={selectedCity}
-          onChange={(e) => setSelectedCity(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
+          value={cityId}
+          onChange={(e) => setCityId(e.target.value)}
+          required
         >
-          <option value="">בחר עיר</option>
+          <option value="">Select a city</option>
           {cities.map((city) => (
             <option key={city.id} value={city.id}>
               {city.city_name}
@@ -57,14 +57,14 @@ const NewServiceRequestForm = ({ categories, providers, cities, onSubmit }) => {
           ))}
         </select>
       </div>
-      <div className="mb-4">
-        <label className="block font-medium">בחר קטגוריה</label>
+      <div>
+        <label>Service Category ID:</label>
         <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
+          value={serviceCategoryId}
+          onChange={(e) => setServiceCategoryId(e.target.value)}
+          required
         >
-          <option value="">בחר קטגוריה</option>
+          <option value="">Select a category</option>
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
@@ -72,23 +72,18 @@ const NewServiceRequestForm = ({ categories, providers, cities, onSubmit }) => {
           ))}
         </select>
       </div>
-      <div className="mb-4">
-        <label className="block font-medium">העלה תמונות</label>
+      <div>
+        <label>Providers (comma-separated IDs):</label>
         <input
-          type="file"
-          multiple
-          onChange={handleImageChange}
-          className="w-full p-2 border border-gray-300 rounded"
+          type="text"
+          value={providers}
+          onChange={(e) => setProviders(e.target.value)}
+          required
         />
       </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        שלח בקשה
-      </button>
+      <button type="submit">Submit</button>
     </form>
   );
-};
+}
 
-export default NewServiceRequestForm;
+export default ServiceRequestForm;
