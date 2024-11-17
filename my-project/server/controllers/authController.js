@@ -1,10 +1,9 @@
-// controllers/authController.js
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const db = require("../server");
+const db = require("../models/db");
 
 // פונקציית רישום
-exports.registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
   const { first_name, last_name, email, password, phone } = req.body;
 
   // בדיקה אם המשתמש קיים
@@ -35,7 +34,7 @@ exports.registerUser = async (req, res) => {
 };
 
 // פונקציית כניסה
-exports.loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const query = "SELECT * FROM users WHERE email = ?";
 
@@ -57,7 +56,7 @@ exports.loginUser = async (req, res) => {
   });
 };
 
-exports.registerProvider = async (req, res) => {
+const registerProvider = async (req, res) => {
   const {
     name,
     phone,
@@ -65,7 +64,7 @@ exports.registerProvider = async (req, res) => {
     email,
     password,
     title,
-    service_description,
+    service_details,
     category_id,
     city_id,
   } = req.body;
@@ -81,7 +80,7 @@ exports.registerProvider = async (req, res) => {
     }
 
     // הוספת בעל המקצוע לטבלה ללא הצפנת הסיסמה
-    const insertQuery = `INSERT INTO service_web.service_providers (name, phone, city, email, password, title, service_description, category_id, city_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const insertQuery = `INSERT INTO service_web.service_providers (name, phone, city, email, password, title, service_details, category_id, city_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     const values = [
       name,
       phone,
@@ -89,7 +88,7 @@ exports.registerProvider = async (req, res) => {
       email,
       password, // שמירת הסיסמה כפי שהתקבלה, ללא הצפנה
       title,
-      service_description,
+      service_details,
       category_id,
       city_id,
     ];
@@ -104,7 +103,7 @@ exports.registerProvider = async (req, res) => {
 };
 
 // פונקציית כניסה
-exports.loginProvider = async (req, res) => {
+const loginProvider = async (req, res) => {
   const { email, password } = req.body;
 
   const query = "SELECT * FROM service_providers WHERE email = ?";
@@ -128,3 +127,4 @@ exports.loginProvider = async (req, res) => {
 };
 
 // כניסה ורישום לבעלי מקצוע ייעשה בדרך דומה
+module.exports = { loginUser, registerUser, registerProvider, loginProvider };
