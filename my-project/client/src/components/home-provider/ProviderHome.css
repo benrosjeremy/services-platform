@@ -24,7 +24,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  /* עיצוב כפתורים */
+  עיצוב כפתורים
   .button-container {
     display: flex;
     gap: 10px;
@@ -45,3 +45,47 @@
     background-color: #4CAF50; /* ירוק */
     color: white;
   }
+  /* עיצוב כפתורים */
+.button-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* כפתור אישור */
+.approve-button {
+  background-color: #4CAF50; /* ירוק */
+  color: white;
+}
+
+/* אפקט מעבר */
+.approve-button:hover {
+  background-color: #45a049; /* ירוק כהה יותר */
+  transform: scale(1.05); /* הגדלה קלה */
+}
+
+/* כפתור דחייה */
+.reject-button {
+  background-color: #f44336; /* אדום */
+  color: white;
+}
+
+/* אפקט מעבר */
+.reject-button:hover {
+  background-color: #d32f2f; /* אדום כהה יותר */
+  transform: scale(1.05); /* הגדלה קלה */
+}
+
+/* אפקט מעבר לכפתורים אחרים */
+.button:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* צל */
+}

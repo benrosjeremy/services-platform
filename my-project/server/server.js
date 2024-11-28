@@ -10,7 +10,12 @@ app.use(cors());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/client", userRoutes);
 app.use("/api/provider", providerRoutes);
+
+
+
+//app.use(express.static(path.join(__dirname, 'client/public')));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -1,5 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const fs = require("fs");
+
+const multer = require("multer");
+const path = require("path");
 const db = require("../models/db");
 
 // פונקציית רישום
@@ -51,24 +56,50 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ error: "Invalid password" });
     }
 
-    // מחזיר את כל אובייקט המשתמש
-    res.status(200).json(user);
+    const token = jwt.sign(
+      { userId: user.id, email: user.email }, // payload
+      "secretKey", // הסוד שלך
+      { expiresIn: "1h" } // זמן תפוגה של ה-token (1 שעה)
+    );
+
+    // החזרת ה-Token יחד עם המידע על המשתמש
+    res.status(200).json({
+      token, // ה-token שנוצר
+      user: user,
+    });
   });
 };
 
-const registerProvider = async (req, res) => {
+const upload = multer({
+  dest: path.join(__dirname, "../client/public/images"), // שמירה ב-client/public/images
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
+      return cb(new Error("Only image files are allowed!"));
+    }
+    cb(null, true);
+  },
+});
+
+// פונקציה לרישום ספק שירות
+const registerProvider = (req, res) => {
   const {
     name,
-    phone,
-    city,
     email,
     password,
-    title,
-    service_details,
-    category_id,
+    phone,
     city_id,
+    title,
+    service_description,
+    category_id, // קטגוריית השירות
+    //logo, // קובץ הלוגו
   } = req.body;
-
+  console.log("name is:", name);
+  console.log(req.body);
+  // אם יש לוגו, הוסף אותו לנתונים
+  const logo = req.file ? `${req.file.filename}` : null; // השימוש בנתיב יחסי
+  console.log("name is123:", name);
+  console.log("logo :", logo);
   // בדיקה אם המייל כבר קיים במערכת
   const query = "SELECT * FROM service_web.service_providers WHERE email = ?";
   db.query(query, [email], (err, results) => {
@@ -78,31 +109,34 @@ const registerProvider = async (req, res) => {
     if (results.length > 0) {
       return res.status(409).json({ error: "Email already registered" });
     }
+    console.log("name is:", name);
+    // הוספת בעל המקצוע לטבלה
+    const insertQuery = `INSERT INTO service_web.service_providers 
+      (name, phone, email, password, title, service_description, category_id, city_id, logo) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    // הוספת בעל המקצוע לטבלה ללא הצפנת הסיסמה
-    const insertQuery = `INSERT INTO service_web.service_providers (name, phone, city, email, password, title, service_details, category_id, city_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     const values = [
       name,
       phone,
-      city,
       email,
-      password, // שמירת הסיסמה כפי שהתקבלה, ללא הצפנה
+      password, // שמירת הסיסמה כפי שהיא, אפשר להוסיף הצפנה אם יש צורך
       title,
-      service_details,
+      service_description,
       category_id,
       city_id,
+      logo, // הוספת הלוגו
     ];
 
     db.query(insertQuery, values, (err, result) => {
       if (err) {
+        console.error("Database insert error:", err);
         return res.status(500).json({ error: "Database insert error" });
       }
+
       res.status(201).json({ message: "Provider registered successfully" });
     });
   });
 };
-
-// פונקציית כניסה
 const loginProvider = async (req, res) => {
   const { email, password } = req.body;
 
@@ -121,8 +155,16 @@ const loginProvider = async (req, res) => {
     if (password !== provider.password) {
       return res.status(401).json({ error: "Invalid password" });
     }
-
-    res.status(200).json(provider);
+    const token = jwt.sign(
+      { userId: provider.id, email: provider.email }, // payload
+      "secretKey", // הסוד שלך
+      { expiresIn: "1h" } // זמן תפוגה של ה-token (1 שעה)
+    );
+    // החזרת ה-Token יחד עם המידע על המשתמש
+    res.status(200).json({
+      token, // ה-token שנוצר
+      user: provider,
+    });
   });
 };
 

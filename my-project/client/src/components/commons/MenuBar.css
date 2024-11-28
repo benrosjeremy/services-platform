@@ -30,6 +30,7 @@
 } */
 /* MenuBar.css */
 .menu-bar {
+  direction: rtl;
   display: flex;
   justify-content: space-between;
   align-items: center;

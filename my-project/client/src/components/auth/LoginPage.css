@@ -42,10 +42,12 @@ LoginPage.css .login-page {
 .register-link a {
   color: #4b8947;
   text-decoration: none;
+  color: black;
 }
 
 .register-link:hover {
   background-color: #45a049;
+
 }
 
 .login-box button {
@@ -176,9 +178,35 @@ LoginPage.css .login-page {
 /* נוודא שהכפתור וכל הפריטים ממורכזים */
 .login-box button {
   margin-top: 1rem;
-  /* background-color: transparent; */
   border: none;
+  color: black;
   padding: 0;
 }
 
 /* שאר העיצוב נשאר כפי שהוא */
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  border: none;
+  background-color: #ddd;
+  font-size: 16px;
+}
+
+.tab.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -9,7 +9,7 @@ const UserRegister = () => {
 
   const handleRegister = async () => {
     try {
-      await axios.post('http://localhost:5000/register', user);
+      await axios.post('http://localhost:5000/api/auth/register', user);
       alert('Registration successful');
     } catch (error) {
       alert('Registration failed');

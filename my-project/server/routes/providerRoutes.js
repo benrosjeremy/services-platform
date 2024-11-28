@@ -4,6 +4,7 @@ const router = express.Router();
 const providerController = require("../controllers/providerController.js");
 
 router.post("/get-service-requests", providerController.GetServiceRequests);
+router.post("/set-price", providerController.SetPrice);
 
 module.exports = router;
 // const express = require("express");

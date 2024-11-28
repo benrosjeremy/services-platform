@@ -1,11 +1,36 @@
 import React, { useEffect, useState } from "react";
-const CategoryList = ({ categoryFilter,setCategoryFilter, categories }) => {
+const CategoryList = ({ categoryFilter,setCategoryFilter }) => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categoriesRes = await fetch(
+          "http://localhost:5000/api/user/get-categories"
+        );
+        const categoriesData = await categoriesRes.json();
+        setCategories(categoriesData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
+
   const handleCategoryChange = (categoryId) => {
     setCategoryFilter(categoryId); // שולחים את ה-ID של הקטגוריה
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4">
       <div className="flex gap-2">
         {" "}
         {/* הוספנו gap קטן כדי לשמור רווחים בין הכפתורים */}

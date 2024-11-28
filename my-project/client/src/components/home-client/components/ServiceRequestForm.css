@@ -1,0 +1,147 @@
+/* ServiceRequestForm.css
+.service-request-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  .form-title {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .submit-button {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .submit-button:hover {
+    background-color: #0056b3;
+  }
+   */
+
+
+
+   
+
+   .service-request-form {
+    direction: rtl;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* שלוש עמודות */
+    grid-template-rows: auto auto; /* שתי שורות */
+    gap: 15px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  
+  .form-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+    grid-column: span 3; /* כותרת ראשית מתפרסת על כל העמודות */
+  }
+  
+  /* כותרת בעמודה הראשונה בשורה הראשונה */
+  .form-group.title-group {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  
+  /* עיר בעמודה השנייה בשורה הראשונה */
+  .form-group.city-group {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  
+  /* תיאור בעמודה השלישית בשורה הראשונה */
+  .form-group.details-group {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  
+  /* כפתור שלח בעמודה השנייה בשורה השנייה */
+  .submit-button {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: center; /* ליישור הכפתור למרכז העמודה */
+    padding: 10px 15px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .submit-button:hover {
+    background-color: #45a049;
+  }
+  
+  /* עיצוב שדות טקסט ותפריטים נפתחים */
+  .form-group label {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 0.9rem;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  textarea {
+    resize: vertical;
+  }
+  

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import HeroSection from "./components/HeroSection";
+import SearchSection from "./components/SearchSection";
 import CategoryList from "./components/CategoryList";
 import ProvidersList from "./components/ProvidersList";
 import WhyChooseUs from "./components/WhyChooseUs";
@@ -17,15 +17,15 @@ const UserHome = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [requests, setRequests] = useState([]);
+  const [selectedProviders, setSelectedProviders] = useState([]);
+
+  const handleSelectedProvidersChange = (selected) => {
+    console.log("Checkbox changed" + selected);
+    setSelectedProviders(selected);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const categoriesRes = await fetch(
-          "http://localhost:5000/api/user/get-categories"
-        );
-        const categoriesData = await categoriesRes.json();
-        setCategories(categoriesData);
-
         const citiesRes = await fetch(
           "http://localhost:5000/api/user/get-cities"
         );
@@ -47,48 +47,14 @@ const UserHome = ({ user }) => {
     fetchData();
   }, []);
 
-  // const handleServiceRequestSubmit = async (serviceRequestData) => {
-  //   try {
-  //     const response = await fetch("http://localhost:5000/api/ServiceRequests", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(serviceRequestData),
-  //     });
-  //     console.log(response);
-  //     const serviceRequest = await response.json();
-
-  //     // שמירת הספקים בטבלת הקשר
-  //     const relatedProviders = providers.filter(
-  //       (provider) => provider.categoryId === serviceRequestData.selectedCategory
-  //     );
-
-  //     for (const provider of relatedProviders) {
-  //       await fetch("http://localhost:5000/api/ServiceRequestProviders", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           ServiceRequestID: serviceRequest.id,
-  //           ServiceProviderID: provider.id,
-  //         }),
-  //       });
-  //     }
-
-  //     alert("בקשת השירות נשלחה בהצלחה!");
-  //   } catch (err) {
-  //     console.error("Error submitting service request:", err);
-  //   }
-  // };
-
   const handleNewServiceRequest = async (data) => {
     try {
+      console.log("vvvvv" +selectedProviders);
       data.userId = user.user_id;
+      data.providers = selectedProviders;
+      data.serviceCategoryId = 1;
       const response = await axios.post("/api/user/create-service", data);
       alert("Service request added successfully!");
-      // אחרי יצירת הבקשה, אתה יכול להוסיף את הבקשה לרשימה אם תרצה
       setRequests((prevRequests) => [...prevRequests, response.data]);
     } catch (err) {
       console.error(err);
@@ -107,23 +73,26 @@ const UserHome = ({ user }) => {
   return (
     <div className="UserHome">
       <div className="min-h-screen bg-gray-50">
-        <HeroSection
+        <CategoryList
+          categoryFilter={categoryFilter}
+          setCategoryFilter={setCategoryFilter}
+        />
+        <NewServiceRequestForm
+          onSubmit={handleNewServiceRequest}
+          cities={cities}
+        />
+        {/* <SearchSection
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           location={location}
           setLocation={setLocation}
-        />
-        <CategoryList
+        /> */}
+
+        <ProvidersList
           categoryFilter={categoryFilter}
-          setCategoryFilter={setCategoryFilter}
-          categories={categories}
+          onSelectedProvidersChange={handleSelectedProvidersChange}
         />
-        <ProvidersList categoryFilter={categoryFilter} />
-        <NewServiceRequestForm
-          onSubmit={handleNewServiceRequest}
-          cities={cities}
-          categories={categories}
-        />
+
         <WhyChooseUs />
       </div>
     </div>

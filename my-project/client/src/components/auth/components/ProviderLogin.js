@@ -16,11 +16,19 @@ const ProviderLogin = ({ onLoginSuccess }) => {
           },
         }
       );
-      if (response.status === 200) {
-        const provider = response.data; // האובייקט של המשתמש
-        onLoginSuccess("provider", provider);
-        console.log("Provider:", provider);
-      }
+
+      const { token, user } = response.data; // תקבל את ה-TOKEN ואת אובייקט המשתמש מהשרת
+
+      // שמור את ה-TOKEN ב-localStorage
+      localStorage.setItem("authToken", token);
+
+      // שמור את המידע על המשתמש (לא חובה אם לא נדרש)
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("userType", "provider");
+      // עדכן את הסטייט בצד הלקוח
+      onLoginSuccess("provider", user); // מעביר את כל האובייקט של המשתמש
+
+      console.log("Provider:", user);
     } catch (error) {
       console.error(
         "Login failed:",

@@ -18,8 +18,18 @@ const UserLogin = ({ onLoginSuccess }) => {
           },
         }
       );
-      const user = response.data; // האובייקט של המשתמש
-      onLoginSuccess("user", user); // מעביר את כל האובייקט
+      
+      const { token, user } = response.data; // תקבל את ה-TOKEN ואת אובייקט המשתמש מהשרת
+
+      // שמור את ה-TOKEN ב-localStorage
+      localStorage.setItem("authToken", token);
+      
+      // שמור את המידע על המשתמש (לא חובה אם לא נדרש)
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("userType", "user");
+
+      // עדכן את הסטייט בצד הלקוח
+      onLoginSuccess("user", user); // מעביר את כל האובייקט של המשתמש
     } catch (error) {
       console.error("Login failed:", error.response ? error.response.data : error);
       alert("Invalid login: " + error);

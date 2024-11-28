@@ -113,6 +113,8 @@ import React, { useState, useEffect } from "react";
 import "./ProviderHome.css";
 
 const ProviderHome = ({ provider }) => {
+  console.log(provider);
+  
   const [requests, setRequests] = useState([]);
   console.log(provider);
 
@@ -136,20 +138,26 @@ const ProviderHome = ({ provider }) => {
   }, [provider]);
 
   const handleApprove = async (requestId) => {
+    // const price = prompt("אנא הכנס את הצעת המחיר:");
+    // if (!price) {
+    //   alert("לא הוזנה הצעת מחיר.");
+    //   return;
+    // }
     const price = prompt("אנא הכנס את הצעת המחיר:");
-    if (!price) {
-      alert("לא הוזנה הצעת מחיר.");
+    if (!price || isNaN(price) || price <= 0) {
+      alert("אנא הכנס סכום תקין להצעת המחיר.");
       return;
     }
     try {
-      await fetch(`http://localhost:3000/api/requests/${requestId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "approved", price }),
+      const response = await axios.post("/api/provider/set-price", {
+        providerId: provider.id,
+        price: price,
+        status: "אושר",
+        requestId: requestId,
       });
       setRequests((prevRequests) =>
         prevRequests.map((req) =>
-          req.id === requestId ? { ...req, status: "approved", price } : req
+          req.id === requestId ? { ...req, status: "אושר", price } : req
         )
       );
     } catch (error) {
@@ -157,24 +165,42 @@ const ProviderHome = ({ provider }) => {
     }
   };
 
+  // const handleReject = async (requestId) => {
+  //   try {
+  //     await fetch(`http://localhost:3000/api/requests/${requestId}`, {
+  //       method: "PUT",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ status: "נדחה", price: null }),
+  //     });
+  //     setRequests((prevRequests) =>
+  //       prevRequests.map((req) =>
+  //         req.id === requestId
+  //           ? { ...req, status: "rejected", price: null }
+  //           : req
+  //       )
+  //     );
+  //   } catch (error) {
+  //     console.error("Error rejecting request:", error);
+  //   }
+  // };
   const handleReject = async (requestId) => {
-    try {
-      await fetch(`http://localhost:3000/api/requests/${requestId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "rejected", price: null }),
-      });
-      setRequests((prevRequests) =>
-        prevRequests.map((req) =>
-          req.id === requestId
-            ? { ...req, status: "rejected", price: null }
-            : req
-        )
-      );
-    } catch (error) {
-      console.error("Error rejecting request:", error);
-    }
-  };
+  try {
+    await axios.post("/api/provider/set-price", {
+      providerId: provider.id,
+      status: "נדחה",
+      price: null,
+      requestId: requestId,
+    });
+    setRequests((prevRequests) =>
+      prevRequests.map((req) =>
+        req.id === requestId ? { ...req, status: "נדחה", price: null } : req
+      )
+    );
+  } catch (error) {
+    console.error("Error rejecting request:", error);
+  }
+};
+
 
   return (
     <div className="page-container">
@@ -193,14 +219,14 @@ const ProviderHome = ({ provider }) => {
             {new Date(request.createdAt).toLocaleDateString()}
           </p>
           <p>
-            <strong>סטטוס:</strong>
+            <strong>סטטוס: {request.status}</strong>
           </p>
           {request.price && (
             <p>
-              <strong>הצעת מחיר:</strong> <span className="price"> ש"ח</span>
+              <strong>הצעת מחיר:</strong> <span className="price">ש"ח</span>
             </p>
           )}
-          {request.status === "pending" && (
+          {request.status === "בהמתנה" && (
             <div className="button-container">
               <button
                 className="button approve-button"
