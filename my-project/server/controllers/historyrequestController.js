@@ -46,7 +46,7 @@ ORDER BY
       res.status(500).json({ message: "Error fetching requests" });
     } else {
       res.json(results);
-      console.log(results);
+      
     }
   });
 };
