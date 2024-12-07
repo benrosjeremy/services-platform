@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-
 const UserLogin = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,12 +17,12 @@ const UserLogin = ({ onLoginSuccess }) => {
           },
         }
       );
-      
+
       const { token, user } = response.data; // תקבל את ה-TOKEN ואת אובייקט המשתמש מהשרת
 
       // שמור את ה-TOKEN ב-localStorage
       localStorage.setItem("authToken", token);
-      
+
       // שמור את המידע על המשתמש (לא חובה אם לא נדרש)
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userType", "user");
@@ -31,33 +30,36 @@ const UserLogin = ({ onLoginSuccess }) => {
       // עדכן את הסטייט בצד הלקוח
       onLoginSuccess("user", user); // מעביר את כל האובייקט של המשתמש
     } catch (error) {
-      console.error("Login failed:", error.response ? error.response.data : error);
+      console.error(
+        "Login failed:",
+        error.response ? error.response.data : error
+      );
       alert("Invalid login: " + error);
     }
   };
 
-//   return (
-//     <div>
-//       <h2>User Login</h2>
-//       <input
-//         type="email"
-//         value={email}
-//         onChange={(e) => setEmail(e.target.value)}
-//         placeholder="Email"
-//       />
-//       <input
-//         type="password"
-//         value={password}
-//         onChange={(e) => setPassword(e.target.value)}
-//         placeholder="Password"
-//       />
-//       <button onClick={handleLogin}>Login</button>
-//     </div>
-//   );
-// };
-return (
+  //   return (
+  //     <div>
+  //       <h2>User Login</h2>
+  //       <input
+  //         type="email"
+  //         value={email}
+  //         onChange={(e) => setEmail(e.target.value)}
+  //         placeholder="Email"
+  //       />
+  //       <input
+  //         type="password"
+  //         value={password}
+  //         onChange={(e) => setPassword(e.target.value)}
+  //         placeholder="Password"
+  //       />
+  //       <button onClick={handleLogin}>Login</button>
+  //     </div>
+  //   );
+  // };
+  return (
     <div className="auth-container">
-      <h2 className="auth-title">User Login</h2>
+      <h2 className="auth-title">כניסת משתמש</h2>
       <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
         <input
           type="email"
@@ -74,7 +76,7 @@ return (
           onChange={(e) => setPassword(e.target.value)}
         />
         <button className="submit-button" onClick={handleLogin}>
-          Login
+          כניסה
         </button>
       </form>
     </div>

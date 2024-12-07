@@ -58,7 +58,7 @@ const ProviderLogin = ({ onLoginSuccess }) => {
   // };
   return (
     <div className="auth-container">
-      <h2 className="auth-title">Provider Login</h2>
+      <h2 className="auth-title">כניסת בעל מקצוע</h2>
       <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
         <input
           type="email"
@@ -75,7 +75,7 @@ const ProviderLogin = ({ onLoginSuccess }) => {
           placeholder="Password"
         />
         <button className="submit-button" onClick={handleLogin}>
-          Login
+          כניסה
         </button>
       </form>
     </div>

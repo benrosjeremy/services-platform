@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ProviderCard from "./ProviderCard";
 
-const ProvidersList = ({ categoryFilter, onSelectedProvidersChange }) => {
+const ProvidersList = ({
+  categoryFilter,
+  cityFilter,
+  onSelectedProvidersChange,
+}) => {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,7 +35,6 @@ const ProvidersList = ({ categoryFilter, onSelectedProvidersChange }) => {
 
   // עדכון רשימת הספקים שנבחרו
   const handleProviderSelection = (id, isSelected) => {
-    console.log("a-Checkbox changed" + id);
     const updatedSelectedProviders = isSelected
       ? [...selectedProviders, id]
       : selectedProviders.filter((providerId) => providerId !== id);
@@ -52,12 +55,18 @@ const ProvidersList = ({ categoryFilter, onSelectedProvidersChange }) => {
     return <div>שגיאה: {error}</div>;
   }
 
-  const filteredProviders = categoryFilter
-    ? providers.filter((provider) => provider.category_id === categoryFilter)
-    : providers;
+  // סינון לפי קטגוריה ועיר
+  const filteredProviders = providers.filter((provider) => {
+    const matchesCategory = categoryFilter
+      ? provider.category_id === categoryFilter
+      : true;
+    const matchesCity =
+      cityFilter && cityFilter !== 0 ? provider.city_id === cityFilter : true;
+    return matchesCategory && matchesCity;
+  });
 
   return (
-    <div>
+    <div className="provider-list">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 provider-cards">
         {filteredProviders.map((provider) => (
           <ProviderCard

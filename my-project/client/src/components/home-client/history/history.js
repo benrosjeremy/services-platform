@@ -251,7 +251,7 @@ const ClientRequestsHistory = ({ clientId }) => {
 
       {/* Modal */}
       {modalData && (
-        <div className="modal-overlay">
+        <div className="modal-history">
           <div className="modal">
             <h2>פרטי ספק</h2>
             <p>

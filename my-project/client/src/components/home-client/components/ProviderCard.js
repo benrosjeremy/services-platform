@@ -76,7 +76,7 @@ const ProviderCard = ({ service, isSelected, onSelectionChange }) => {
         <div className="p-4">
           <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
           <p className="text-gray-600 mb-2">{service.name}</p>
-          <p className="text-gray-600 mb-4">{service.city}</p>
+          <p className="text-gray-600 mb-4">{service.city_name}</p>
           <div className="flex items-center mb-4">
             <Star className="w-5 h-5 text-yellow-400 fill-current" />
             <span className="mr-1">{averageRating}</span> {/* ממוצע הדירוג */}
@@ -86,7 +86,7 @@ const ProviderCard = ({ service, isSelected, onSelectionChange }) => {
           <div className="flex justify-between items-center mt-4">
             <button
               onClick={togglePopup}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+              className="text-white px-4 py-2 rounded transition-colors details-button"
             >
               פרטים נוספים
             </button>
@@ -103,7 +103,7 @@ const ProviderCard = ({ service, isSelected, onSelectionChange }) => {
       {/* Popup */}
       {isPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="popup-container bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+          <div className="popup-container bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative h-[530px]">
             <button
               onClick={togglePopup}
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"

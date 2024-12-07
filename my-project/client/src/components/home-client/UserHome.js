@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import SearchSection from "./components/SearchSection";
+import SearchSection from "./components/noUse/SearchSection";
 import CategoryList from "./components/CategoryList";
 import ProvidersList from "./components/ProvidersList";
 import WhyChooseUs from "./components/WhyChooseUs";
 import NewServiceRequestForm from "./components/NewServiceRequestForm";
 // import ".../App.css";
 import axios from "axios";
+import { usePopup } from "../commons/PopupContext";
 
 const UserHome = ({ user }) => {
   const [categoryFilter, setCategoryFilter] = useState(null);
+  const [cityFilter, setCityFilter] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [location, setLocation] = useState("");
   const [categories, setCategories] = useState([]);
@@ -18,6 +20,7 @@ const UserHome = ({ user }) => {
   const [error, setError] = useState(null);
   const [requests, setRequests] = useState([]);
   const [selectedProviders, setSelectedProviders] = useState([]);
+  const { showPopupMessage } = usePopup();
 
   const handleSelectedProvidersChange = (selected) => {
     console.log("Checkbox changed" + selected);
@@ -49,16 +52,22 @@ const UserHome = ({ user }) => {
 
   const handleNewServiceRequest = async (data) => {
     try {
-      console.log("vvvvv" +selectedProviders);
-      data.userId = user.user_id;
-      data.providers = selectedProviders;
-      data.serviceCategoryId = 1;
+      // data.userId = user.user_id;
+      // data.providers = selectedProviders;
+      // data.serviceCategoryId = 1;
+
+      data.append("userId", user.user_id);
+      data.append("serviceCategoryId", 1);
+      selectedProviders.forEach((provider) => {
+        data.append("providers[]", provider); // הוספת כל ספק תחת השם "providers[]"
+      });
       const response = await axios.post("/api/user/create-service", data);
-      alert("Service request added successfully!");
+
+      showPopupMessage("Service request added successfully!");
       setRequests((prevRequests) => [...prevRequests, response.data]);
     } catch (err) {
-      console.error(err);
-      alert("Error adding service request.");
+      console.error(err.response.data.message);
+      showPopupMessage(err.response.data.message);
     }
   };
 
@@ -73,14 +82,30 @@ const UserHome = ({ user }) => {
   return (
     <div className="UserHome">
       <div className="min-h-screen bg-gray-50">
-        <CategoryList
-          categoryFilter={categoryFilter}
-          setCategoryFilter={setCategoryFilter}
-        />
-        <NewServiceRequestForm
-          onSubmit={handleNewServiceRequest}
-          cities={cities}
-        />
+        <div className="service-request-form">
+          <CategoryList
+            categoryFilter={categoryFilter}
+            setCategoryFilter={setCategoryFilter}
+          />
+          <div className="service-request-form-new">
+            <NewServiceRequestForm
+              onSubmit={handleNewServiceRequest}
+              cities={cities}
+              cityFilter={cityFilter}
+              setCityFilter={setCityFilter}
+            />
+          </div>
+          {/* {categoryFilter && (
+    <div className={`new-service-form-container ${categoryFilter ? "open" : ""}`}>
+      <NewServiceRequestForm
+        onSubmit={handleNewServiceRequest}
+        cities={cities}
+        cityFilter={cityFilter}
+        setCityFilter={setCityFilter}
+      />
+    </div>
+  )} */}
+        </div>
         {/* <SearchSection
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -90,6 +115,7 @@ const UserHome = ({ user }) => {
 
         <ProvidersList
           categoryFilter={categoryFilter}
+          cityFilter={cityFilter}
           onSelectedProvidersChange={handleSelectedProvidersChange}
         />
 

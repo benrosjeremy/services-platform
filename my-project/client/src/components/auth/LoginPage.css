@@ -11,7 +11,7 @@ LoginPage.css .login-page {
 .login-title {
   font-size: 2rem;
   color: #333;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .login-container {
@@ -47,7 +47,6 @@ LoginPage.css .login-page {
 
 .register-link:hover {
   background-color: #45a049;
-
 }
 
 .login-box button {
@@ -93,7 +92,7 @@ LoginPage.css .login-page {
 }
 
 .form-input:focus {
-  border-color: #4f46e5;
+  border-color: #48a348;
   box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
 }
 
@@ -105,7 +104,7 @@ LoginPage.css .login-page {
 .submit-button {
   width: 100%;
   padding: 12px;
-  background-color: #4f46e5;
+  background-color: #81c784;
   /* color: rgb(255, 255, 255); */
   border: none;
   border-radius: 8px;
@@ -116,7 +115,7 @@ LoginPage.css .login-page {
 }
 
 .submit-button:hover {
-  background-color: #4338ca;
+  background-color: #48a348;
   transform: translateY(-1px);
 }
 
@@ -147,7 +146,7 @@ LoginPage.css .login-page {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 90vh;
   background-color: #f0f4f8;
   font-family: Arial, sans-serif;
 }
@@ -187,7 +186,6 @@ LoginPage.css .login-page {
 .tabs {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
 }
 
 .tab {
@@ -195,12 +193,13 @@ LoginPage.css .login-page {
   margin: 0 10px;
   cursor: pointer;
   border: none;
+  border-radius: 8px 8px 0 0;
   background-color: #ddd;
   font-size: 16px;
 }
 
 .tab.active {
-  background-color: #007bff;
+  background-color: #48a348;
   color: white;
   font-weight: bold;
 }
@@ -209,4 +208,8 @@ LoginPage.css .login-page {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-color: #48a348;
+  border-style: solid;
+  border-radius: 8px;
+  border-width: 1px;
 }

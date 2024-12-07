@@ -58,8 +58,10 @@
 // export default ProviderRegister;
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
+import { usePopup } from "../../commons/PopupContext";
 const ProviderRegister = () => {
+  const { showPopupMessage } = usePopup();
   const [cities, setCities] = useState([]);
   const [categories, setCategories] = useState([]);
   const [provider, setProvider] = useState({
@@ -73,7 +75,9 @@ const ProviderRegister = () => {
     category_id: "", // קטגוריית השירות
     logo: null, // קובץ הלוגו
   });
-
+  const [popupMessage, setPopupMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
   // טוען את רשימת הערים וקטגוריות השירות
   useEffect(() => {
     const fetchCitiesAndCategories = async () => {
@@ -98,19 +102,43 @@ const ProviderRegister = () => {
   }, []);
 
   const handleLogoUpload = (e) => {
+    console.log(e.target.files[0]);
     setProvider({ ...provider, logo: e.target.files[0] });
   };
 
+  // const handleRegister = async () => {
+  //   try {
+  //     // יצירת FormData כדי לשלוח גם את הקובץ
+  //     const formData = new FormData();
+  //     for (const key in provider) {
+  //       formData.append(key, provider[key]);
+  //     }
+  //     for (const pair of formData.entries()) {
+  //       console.log(pair[0] + ": ", pair[1]);
+  //     }
+  //     await axios.post(
+  //       "http://localhost:5000/api/auth/register-provider",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+
+  //     alert("Registration successful");
+  //   } catch (error) {
+  //     console.error("Registration failed:", error);
+  //     alert("Registration failed");
+  //   }
+  // };
   const handleRegister = async () => {
     try {
-      // יצירת FormData כדי לשלוח גם את הקובץ
       const formData = new FormData();
       for (const key in provider) {
         formData.append(key, provider[key]);
       }
-      for (const pair of formData.entries()) {
-        console.log(pair[0] + ": ", pair[1]);
-      }
+
       await axios.post(
         "http://localhost:5000/api/auth/register-provider",
         formData,
@@ -120,14 +148,27 @@ const ProviderRegister = () => {
           },
         }
       );
+      showPopupMessage("הפעולה בוצעה בהצלחה!");
 
-      alert("Registration successful");
+      // הצגת הודעת הצלחה
+      // setPopupMessage("הרישום בוצע בהצלחה!");
+      // setShowPopup(true);
+
+      // מעבר לדף הבית אחרי השהיה
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
     } catch (error) {
       console.error("Registration failed:", error);
-      alert("Registration failed");
+
+      // הצגת הודעת כישלון
+      setPopupMessage("הרישום נכשל. נסה שוב.");
+      setShowPopup(true);
+
+      // סגירת המודאל אחרי כמה שניות
+      setTimeout(() => setShowPopup(false), 2000);
     }
   };
-
   return (
     <div className="auth-container">
       <h2 className="auth-title">Register Provider</h2>

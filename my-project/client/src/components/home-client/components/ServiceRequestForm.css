@@ -59,19 +59,15 @@
   }
    */
 
-
-
-   
-
-   .service-request-form {
+/* .service-request-form {
     direction: rtl;
     margin: 0 auto;
     padding: 20px;
     background-color: #f8f9fa;
     font-family: Arial, sans-serif;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* שלוש עמודות */
-    grid-template-rows: auto auto; /* שתי שורות */
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto; 
     gap: 15px;
   }
   
@@ -86,32 +82,31 @@
     margin-bottom: 20px;
     font-size: 1.5rem;
     color: #333;
-    grid-column: span 3; /* כותרת ראשית מתפרסת על כל העמודות */
+    grid-column: span 3; 
   }
   
-  /* כותרת בעמודה הראשונה בשורה הראשונה */
+  
   .form-group.title-group {
     grid-column: 1;
     grid-row: 1;
   }
   
-  /* עיר בעמודה השנייה בשורה הראשונה */
+
   .form-group.city-group {
     grid-column: 2;
     grid-row: 1;
   }
-  
-  /* תיאור בעמודה השלישית בשורה הראשונה */
+
   .form-group.details-group {
     grid-column: 3;
     grid-row: 1;
   }
   
-  /* כפתור שלח בעמודה השנייה בשורה השנייה */
+  
   .submit-button {
     grid-column: 2;
     grid-row: 2;
-    justify-self: center; /* ליישור הכפתור למרכז העמודה */
+    justify-self: center; 
     padding: 10px 15px;
     background-color: #4caf50;
     color: white;
@@ -125,7 +120,7 @@
     background-color: #45a049;
   }
   
-  /* עיצוב שדות טקסט ותפריטים נפתחים */
+ 
   .form-group label {
     font-size: 0.9rem;
     margin-bottom: 5px;
@@ -144,4 +139,386 @@
   textarea {
     resize: vertical;
   }
+   */
+
+.label-category {
+  margin: 1px; /* רווח חיצוני בין האלמנטים */
+  padding: 15px; /* רווח פנימי בתוך הקטגוריה */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icon-style {
+  margin-bottom: 8px; /* רווח בין האייקון לטקסט */
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  flex-grow: 1; /* מחייב את כל הקטגוריות להתפרס */
+  display: flex;
+  justify-content: center;
+}
+/* General styles */
+.service-request-form {
+  max-width: 90%; /* רוחב רחב יותר במסך רגיל */
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start; /* מיקום של כל האלמנטים בצד שמאל */
+  align-items: center;
+  direction: rtl; /* שפה מימין לשמאל */
+  flex-wrap: wrap; /* שיאפשר אלמנטים נוספים לרדת לשורה הבאה אם יש צורך */
+  margin-bottom: 5px;
+}
+.service-request-form-new {
+  max-width: 90%; /* רוחב רחב יותר במסך רגיל */
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.048);
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start; /* מיקום של כל האלמנטים בצד שמאל */
+  align-items: center;
+  direction: rtl; /* שפה מימין לשמאל */
+  flex-wrap: wrap; /* שיאפשר אלמנטים נוספים לרדת לשורה הבאה אם יש צורך */
+  margin-bottom: 5px;
+}
+
+.service-request-form-form {
+  max-width: 90%; /* רוחב רחב יותר במסך רגיל */
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start; /* מיקום של כל האלמנטים בצד שמאל */
+  align-items: center;
+  direction: rtl; /* שפה מימין לשמאל */
+  flex-wrap: wrap; /* שיאפשר אלמנטים נוספים לרדת לשורה הבאה אם יש צורך */
+  margin-bottom: 5px;
+}
+
+/* Form group styles */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 20%; /* כל שדה יתפוס 20% מהרוחב */
+  min-width: 150px; /* רוחב מינימלי */
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+  width: 100%; /* כל השדות ייקחו 100% רוחב בתוך ה-form-group */
+  height: 50px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+.form-group textarea {
+  min-height: 80px;
+  resize: none;
+}
+
+.city-group select {
+  background-color: #fafafa;
+}
+
+.image-group input[type="file"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+/* Button styles */
+.form-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start; /* הכפתורים יהיו בצד שמאל */
+  align-items: center;
+}
+
+.submit-button,
+.reset-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.3s;
+  width: 48%; /* הכפתורים ייקחו 48% מהשורה */
+}
+
+.submit-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.reset-button {
+  background-color: #c3bcbb;
+  color: white;
+}
+
+.reset-button:hover {
+  background-color: #979392;
+  transform: scale(1.05);
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .service-request-form {
+    padding: 15px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-group {
+    flex-basis: 100%;
+  }
+
+  .form-buttons {
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .submit-button,
+  .reset-button {
+    width: 100%;
+  }
+}
+
+/* .service-request-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
   
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .submit-button,
+  .reset-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .submit-button {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold
+  }
+  
+  .reset-button {
+    background-color: #f44336;
+    color: white;
+    margin-left: 5px;
+    font-weight: bold
+  ;
+  }
+  
+  .submit-button:hover {
+    background-color: #45a049;
+  }
+  
+  .reset-button:hover {
+    background-color: #e53935;
+  } */
+
+.form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem; /* רווח בין האלמנטים */
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-input {
+  height: 2.6rem; /* גובה אחיד */
+  width: 15rem; /* רוחב אחיד */
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.image-input {
+  height: 2.6rem; /* גובה אחיד */
+  padding: 0.5rem 0rem 0.5rem 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.form-button {
+  height: 2.5rem; /* גובה תואם לשדות הקלט */
+  padding: 0 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.form-button:hover {
+  background-color: #0056b3;
+}
+
+.image-preview {
+  display: flex; /* מסדר את האלמנטים בשורה */
+  align-items: center; /* מיישר לגובה אחיד */
+  gap: 1rem; /* רווח בין הפריטים */
+  flex-wrap: wrap; /* מאפשר ירידה לשורה חדשה במקרה של חוסר מקום */
+}
+
+.image-preview-item {
+  position: relative; /* עבור מיקום הכפתור */
+  display: flex;
+  flex-direction: column; /* מסדר את התמונה והכפתור */
+  align-items: center;
+}
+
+.image-preview-thumbnail {
+  height: 100px; /* גובה אחיד לתמונות */
+  width: auto; /* שמירה על היחס */
+  border-radius: 4px; /* פינות מעוגלות לתמונות */
+  object-fit: cover; /* מבטיח שהתמונה תמלא את המרחב מבלי לעוות את היחס */
+  border: 1px solid #ccc; /* מסגרת לתמונה */
+}
+
+.remove-image-button {
+  position: absolute;
+  top: 5px; /* מרחק מהחלק העליון */
+  right: 5px; /* מרחק מהחלק הימני */
+  background: rgba(255, 255, 255, 0.8); /* רקע חצי שקוף */
+  border: none; /* הסרת מסגרת */
+  border-radius: 50%; /* עיגול הכפתור */
+  cursor: pointer;
+  padding: 0.2rem;
+  font-size: 0.8rem;
+}
+
+.remove-image-button:hover {
+  background: rgba(128, 230, 111, 0.8);
+  color: white; /* טקסט לבן */
+}
+
+.image-preview-thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin: 5px;
+}
+
+.image-input {
+  display: flex;
+  align-items: center; /* יישור אנכי של האלמנטים */
+  gap: 10px; /* רווח בין הכפתור לטקסט */
+  width: fit-content; /* התאמה לגודל התוכן */
+}
+
+.image-button {
+  background-color: #e4e5e3; /* צבע הכפתור */
+  border-radius: 0 8px 8px 0;
+  white-space: nowrap;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  height: 2.6rem; /* גובה אחיד */
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.image-button:hover {
+  background-color: #b8bab8; /* צבע הכפתור במעבר עכבר */
+}
+
+.file-input-hidden {
+  display: none; /* הסתרת שדה הקלט */
+}
+
+.image-count {
+  white-space: nowrap;
+}
+
+.button-input {
+  height: 2.6rem;
+}

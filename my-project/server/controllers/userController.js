@@ -284,7 +284,7 @@ const sendMailToProvider = async (email, serviceRequestTitle) => {
     await transporter.sendMail(mailOptions);
   } catch (err) {
     console.error("Error sending email:", err);
-    throw new Error("Error sending email");
+    // throw new Error("Error sending email");
   }
 };
 // const createServiceRequest = async (req, res) => {
@@ -343,18 +343,39 @@ const sendMailToProvider = async (email, serviceRequestTitle) => {
 const createServiceRequest = (req, res) => {
   const { title, details, cityId, serviceCategoryId, providers, userId } =
     req.body;
+  const files = req.files;
   console.log("Service request data:", req.body);
+  console.log("Received files:", files);
+  console.log("פרםהןגקרד:", providers);
+  console.log("פרםהןגקרד:", serviceCategoryId);
 
-  if (
-    !title ||
-    !details ||
-    !cityId ||
-    !serviceCategoryId ||
-    !Array.isArray(providers)
-  ) {
-    return res.status(400).json({ message: "Invalid input data" });
+  const inputerrors = [];
+
+  if (!title) {
+    inputerrors.push("חובה להזין כותרת");
   }
 
+  if (!details) {
+    inputerrors.push("חובה להזין פרטים");
+  }
+
+  if (!cityId) {
+    inputerrors.push("חובה לבחור עיר");
+  }
+
+  if (!serviceCategoryId) {
+    inputerrors.push("חובה לבחור קטגוריית שירות");
+  }
+
+  if (!Array.isArray(providers)) {
+    inputerrors.push("חובה לבחור ספקי שירות");
+  }
+
+  if (inputerrors.length > 0) {
+    return res.status(400).json({ message: inputerrors.join(", ") });
+  }
+
+  console.log("1");
   // להתחיל טרנזקציה
   db.beginTransaction((err) => {
     if (err) {
@@ -377,14 +398,15 @@ const createServiceRequest = (req, res) => {
           });
         }
 
-        const serviceRequestId = result.insertId;
+        const serviceRequestId = result.insertId; // הגדרת ID של הבקשה בתוך הקולבק
 
-        // ביצוע השאילתא השנייה להוספת ספקי השירות לבקשה
+        // המשך הקוד כאן, כולל הוספת ספקי השירות
         const providerValues = providers.map((providerId) => [
           serviceRequestId,
           providerId,
           null,
         ]);
+
         db.query(
           `INSERT INTO service_request_providers (serviceRequestId, serviceProviderId, price)
            VALUES ?`,
@@ -399,7 +421,7 @@ const createServiceRequest = (req, res) => {
               });
             }
 
-            // שליחת מיילים לכל ספק שירות
+            // המשך שליחת מיילים וכו'
             const emailsQuery = `SELECT email FROM service_providers WHERE id IN (?)`;
             db.query(emailsQuery, [providers], (err, emails) => {
               if (err) {
@@ -411,27 +433,50 @@ const createServiceRequest = (req, res) => {
                 });
               }
 
-              // שליחה של המיילים לכל ספק שירות
               emails.forEach((provider) => {
                 sendMailToProvider(provider.email, title);
               });
 
-              // סיום הטרנזקציה
-              db.commit((err) => {
-                if (err) {
-                  console.error("Error committing transaction:", err);
-                  return db.rollback(() => {
-                    res
-                      .status(500)
-                      .json({ message: "Error committing transaction" });
-                  });
-                }
+              // הוספת קבצי התמונות
+              if (files && files.length > 0) {
+                const imagePaths = files.map((file) => [
+                  serviceRequestId,
+                  `${file.filename}`, // נתיב יחסי לקובץ
+                  new Date(),
+                ]);
 
-                // החזרת תגובה על הצלחה
-                res
-                  .status(201)
-                  .json({ message: "Service request added successfully" });
-              });
+                db.query(
+                  `INSERT INTO service_images (serviceRequestId, path, createdAt)
+                   VALUES ?`,
+                  [imagePaths],
+                  (err) => {
+                    if (err) {
+                      console.error("Error inserting images:", err);
+                      return db.rollback(() => {
+                        res
+                          .status(500)
+                          .json({ message: "Error inserting service images" });
+                      });
+                    }
+
+                    // סיום הטרנזקציה
+                    db.commit((err) => {
+                      if (err) {
+                        console.error("Error committing transaction:", err);
+                        return db.rollback(() => {
+                          res
+                            .status(500)
+                            .json({ message: "Error committing transaction" });
+                        });
+                      }
+
+                      res.status(201).json({
+                        message: "Service request added successfully",
+                      });
+                    });
+                  }
+                );
+              }
             });
           }
         );
@@ -533,7 +578,17 @@ const GetCities = async (req, res) => {
 };
 
 const GetProviders = async (req, res) => {
-  const query = "SELECT * FROM service_web.service_providers"; // כאן תשים את שם הטבלה שלך
+  const query = `
+    SELECT 
+      sp.*,
+      c.city_name AS city_name
+    FROM 
+      service_web.service_providers sp
+    LEFT JOIN 
+      service_web.cities c
+    ON 
+      sp.city_id = c.id
+  `; // שילוב נתוני ערים
   db.query(query, (err, results) => {
     if (err) {
       res.status(500).json({ error: "אירעה שגיאה בשרת" });
