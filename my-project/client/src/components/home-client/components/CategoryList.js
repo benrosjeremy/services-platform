@@ -104,6 +104,8 @@ const CategoryList = ({ categoryFilter, setCategoryFilter }) => {
       {error && <p>שגיאה: {error}</p>}
       {!loading && !error && (
         <div className="relative flex items-center">
+          {/* <p>אנא בחר בעל מקצוע:</p> */}
+          <br/>
           <button
             className="absolute left-0 bg-gray-200 p-2 rounded-full shadow-md"
             onClick={scrollLeft}

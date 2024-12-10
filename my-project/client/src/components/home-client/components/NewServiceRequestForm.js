@@ -111,8 +111,9 @@ function ServiceRequestForm({ onSubmit, cities, cityFilter, setCityFilter }) {
   };
 
   return (
-    <>
+    <> <p>אנא מלא פרטי הבקשה:</p><br/>
       <form className="form-container" onSubmit={handleSubmit}>
+       
         <label className="form-item" htmlFor="cityId">
           עיר
         </label>
@@ -206,6 +207,7 @@ function ServiceRequestForm({ onSubmit, cities, cityFilter, setCityFilter }) {
           </div>
         ))}
       </div>
+      <p>אנא סמן את בעלי מקצוע שמהם תרצה לקבל הצעות מחיר:</p>
     </>
   );
 }

@@ -458,7 +458,9 @@ const createServiceRequest = (req, res) => {
                           .json({ message: "Error inserting service images" });
                       });
                     }
-
+                  }
+                );
+              }
                     // סיום הטרנזקציה
                     db.commit((err) => {
                       if (err) {
@@ -475,9 +477,8 @@ const createServiceRequest = (req, res) => {
                       });
                     });
                   }
-                );
-              }
-            });
+              
+            );
           }
         );
       }

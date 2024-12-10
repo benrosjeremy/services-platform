@@ -10,34 +10,61 @@ const getRequestsHistory = (req, res) => {
   }
 
   const query = `
- SELECT 
-    sr.id AS request_id,
-    sr.title AS request_title,
-    sr.details AS request_details,
-    sr.cityId AS city_id,
-    sr.createdAt AS request_created_at,
-    sr.userId AS user_id,
-    srp.price AS provider_price,
-    srp.status AS provider_status,
-    srp.serviceProviderId AS provider_id,
-    sp.name AS provider_name,
-    sp.phone AS provider_phone,
-    sp.title AS provider_title,
-    sp.service_description AS provider_description,
-    sc.name AS category_name,
-    sc.icon AS category_icon
-FROM 
-    service_requests sr
-JOIN 
-    service_request_providers srp ON sr.id = srp.serviceRequestId
-JOIN 
-    service_providers sp ON srp.serviceProviderId = sp.id
-JOIN 
-    service_categories sc ON sp.category_id = sc.id
-WHERE 
-    sr.userId = ?
-ORDER BY 
-    sr.createdAt DESC;
+SELECT 
+    sr.id AS serviceRequestId,
+    sr.title,
+    sr.details,
+    sr.createdAt ,
+    c.city_name AS cityName,
+    sc.name AS categoryName,
+    sc.icon AS categoryIcon,
+    
+    -- Subquery for providers with additional details
+    (
+        SELECT JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'serviceProviderId', srp.serviceProviderId,
+                'price', srp.price,
+                'status', srp.status,
+                'id', p.id,
+                'name', p.name,
+                'phone', p.phone,
+                'city_id', p.city_id,
+                'email', p.email,
+                'logo', p.logo,
+                'title', p.title,
+                'service_description', p.service_description,
+                'category_id', p.category_id
+            )
+        )
+        FROM service_request_providers srp
+        JOIN service_providers p ON srp.serviceProviderId = p.id
+        WHERE srp.serviceRequestId = sr.id
+    ) AS serviceProviders,
+    
+    -- Subquery for images
+    (
+        SELECT JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'imageId', si.id,
+                'path', si.path,
+                'createdAt', si.createdAt
+            )
+        )
+        FROM service_images si
+        WHERE si.serviceRequestId = sr.id
+    ) AS serviceImages
+
+FROM service_requests sr
+
+-- Joining additional tables
+LEFT JOIN cities c ON sr.cityId = c.id
+LEFT JOIN service_categories sc ON sr.serviceCategoryId = sc.id
+
+WHERE sr.userId = ?
+
+GROUP BY sr.id, sr.title, sr.details, sr.createdAt, c.city_name, sc.name, sc.icon
+ORDER BY sr.createdAt DESC;
 
 `;
   db.query(query, [clientId], (err, results) => {
@@ -46,7 +73,6 @@ ORDER BY
       res.status(500).json({ message: "Error fetching requests" });
     } else {
       res.json(results);
-      
     }
   });
 };

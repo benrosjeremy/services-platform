@@ -1,0 +1,54 @@
+.price-offers-container {
+  margin-top: 10px;
+}
+
+.toggle-offers-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.toggle-offers-button:hover {
+  background-color: #0056b3;
+}
+
+.offers-list {
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+}
+
+.offers-list.closed {
+  max-height: 0;
+}
+
+.offers-list.open {
+  /*max-height: 500px;  מספיק גבוה להכיל את התוכן */
+}
+
+.provider-card {
+  border: 1px solid #ddd;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.provider-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.provider-card p {
+  margin: 8px 0;
+  line-height: 1.5;
+  color: #555;
+}
+
+.provider-card p strong {
+  color: #333;
+}

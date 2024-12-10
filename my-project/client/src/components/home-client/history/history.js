@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import PriceOffers from "../components/PriceOffers"; // ייבוא הקומפוננטה החדשה
 import "./ClientRequestsHistory.css";
 
 const ClientRequestsHistory = ({ clientId }) => {
@@ -9,17 +10,6 @@ const ClientRequestsHistory = ({ clientId }) => {
     date: "",
     type: "all",
   });
-  const [modalData, setModalData] = useState(null); // לניהול המודאל
-
-  // רשימת סוגי הבקשות
-  const requestTypes = [
-    "גינון",
-    "הובלות",
-    "ניקיון",
-    "אינסטלציה",
-    "חשמל",
-    "שיפוצים",
-  ];
 
   useEffect(() => {
     const loadRequests = async () => {
@@ -36,132 +26,26 @@ const ClientRequestsHistory = ({ clientId }) => {
     if (clientId) loadRequests();
   }, [clientId]);
 
-
   const handleFilterChange = (key, value) => {
     setFilters((prevFilters) => ({ ...prevFilters, [key]: value }));
   };
 
-  // סינון ומיון הבקשות
   const filteredRequests = requests
-  .filter((request) => {
-    const { status, date, type } = filters;
-    let matches = true;
+    .filter((request) => {
+      const { status, date, type } = filters;
+      let matches = true;
 
-    if (status !== "all" && request.provider_status !== status) matches = false;
-    if (date && !new Date(request.request_created_at).toISOString().startsWith(date)) matches = false;
-    if (type !== "all" && request.category_name !== type) matches = false;
+      if (status !== "all" && request.status !== status) matches = false;
+      if (date && !new Date(request.createdAt).toISOString().startsWith(date))
+        matches = false;
+      if (type !== "all" && request.categoryName !== type) matches = false;
 
-    return matches;
-  })
-  .sort((a, b) => new Date(b.request_created_at) - new Date(a.request_created_at));
+      return matches;
+    })
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-
-  const handleDelete = async (requestId) => {
-    if (window.confirm("האם אתה בטוח שברצונך למחוק את הבקשה?")) {
-      try {
-        await axios.delete(`/api/client/delete-request/${requestId}`);
-        setRequests((prevRequests) =>
-          prevRequests.filter((request) => request.id !== requestId)
-        );
-      } catch (error) {
-        console.error("Error deleting request:", error);
-      }
-    }
-  };
-  const openModal = (providerData) => {
-    setModalData(providerData);
-  };
-
-  const closeModal = () => {
-    setModalData(null);
-  };
   return (
-//     <div className="page-container">
-//       <h1 className="page-header">היסטוריית בקשות</h1>
-
-//       {/* Filters Section */}
-//       <div className="filters-container">
-//         <select
-//           value={filters.status}
-//           onChange={(e) => handleFilterChange("status", e.target.value)}
-//         >
-//           <option value="all">כל הסטטוסים</option>
-//           <option value="בהמתנה">בהמתנה</option>
-//           <option value="אושר">אושר</option>
-//           <option value="נדחה">נדחה</option>
-//         </select>
-
-//         <input
-//           type="date"
-//           value={filters.date}
-//           onChange={(e) => handleFilterChange("date", e.target.value)}
-//         />
-
-//         <select
-//           value={filters.type}
-//           onChange={(e) => handleFilterChange("type", e.target.value)}
-//         >
-//           <option value="all">כל סוגי הבקשות</option>
-//           {requestTypes.map((type) => (
-//             <option key={type} value={type}>
-//               {type}
-//             </option>
-//           ))}
-//         </select>
-//       </div>
-
-//       {/* Requests List */}
-//       {filteredRequests.length === 0 ? (
-//         <p>לא נמצאו בקשות התואמות את הסינון.</p>
-//       ) : (
-//         filteredRequests.map((request) => (
-//           <div key={request.id} className="request-card">
-//             <p>
-//               <strong>תיאור הבעיה:</strong> {request.request_details}
-//             </p>
-//             <p>
-//               <strong>תאריך:</strong>{" "}
-//               {new Date(request.request_created_at).toLocaleDateString()}
-//             </p>
-//             <p>
-//               <strong>סטטוס:</strong> {request.provider_status}
-//             </p>
-//             {request.provider_status === "אושר" && (
-//   <p>
-//     <strong>מחיר:</strong> {request.provider_price}ש"ח
-//   </p>
-// )}
-            
-//             <p>
-//               <strong>סוג בקשה:</strong> {request.category_name}
-//             </p>
-//             {request.response && (
-//               <p>
-//                 <strong>תשובת ספק:</strong> {request.response}
-//               </p>
-//             )}
-
-//             <div className="button-container">
-//               <button
-//                 className="button details-button"
-//                 onClick={() => alert(`פרטים של הספק:
-//                    ${request.provider_phone}
-//                   ${request.provider_name}`)}
-//               >
-//                 פרטי ספק
-//               </button>
-//               <button
-//                 className="button delete-button"
-//                 onClick={() => handleDelete(request.id)}
-//               >
-//                 מחק בקשה
-//               </button>
-//             </div>
-//           </div>
-//         ))
-//       )}
-//     </div>
-<div className="page-container">
+    <div className="page-container">
       <h1 className="page-header">היסטוריית בקשות</h1>
 
       {/* Filters Section */}
@@ -187,11 +71,13 @@ const ClientRequestsHistory = ({ clientId }) => {
           onChange={(e) => handleFilterChange("type", e.target.value)}
         >
           <option value="all">כל סוגי הבקשות</option>
-          {requestTypes.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
+          {["גינון", "הובלות", "ניקיון", "אינסטלציה", "חשמל", "שיפוצים"].map(
+            (type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            )
+          )}
         </select>
       </div>
 
@@ -201,70 +87,33 @@ const ClientRequestsHistory = ({ clientId }) => {
       ) : (
         filteredRequests.map((request) => (
           <div key={request.id} className="request-card">
-            <p>{request.category_icon}</p>
+            <p>{request.categoryIcon}</p>
             <p>
-              <strong>תיאור הבעיה:</strong> {request.request_details}
+              <strong>תיאור הבעיה:</strong> {request.details}
             </p>
             <p>
               <strong>תאריך:</strong>{" "}
-              {new Date(request.request_created_at).toLocaleDateString()}
+              {new Date(request.createdAt).toLocaleDateString()}
             </p>
             <p>
-              <strong>סטטוס:</strong> {request.provider_status}
+              <strong>סטטוס:</strong> {request.status}
             </p>
-            {request.provider_status === "אושר" && (
+            {request.status === "אושר" && (
               <p>
-                <strong>מחיר:</strong> {request.provider_price} ש"ח
+                <strong>מחיר:</strong> {request.price} ש"ח
               </p>
             )}
             <p>
-              <strong>סוג בקשה:</strong> {request.category_name}
+              <strong>סוג בקשה:</strong> {request.categoryName}
             </p>
-            {request.response && (
-              <p>
-                <strong>תשובת ספק:</strong> {request.response}
-              </p>
-            )}
+            <p>
+              <strong>עיר:</strong> {request.cityName}
+            </p>
 
-            <div className="button-container">
-              <button
-                className="button details-button"
-                onClick={() =>
-                  openModal({
-                    name: request.provider_name,
-                    phone: request.provider_phone,
-                  })
-                }
-              >
-                פרטי ספק
-              </button>
-              <button
-                className="button delete-button"
-                onClick={() => handleDelete(request.id)}
-              >
-                מחק בקשה
-              </button>
-            </div>
+            {/* Price Offers Component */}
+            <PriceOffers providers={request.serviceProviders} />
           </div>
         ))
-      )}
-
-      {/* Modal */}
-      {modalData && (
-        <div className="modal-history">
-          <div className="modal">
-            <h2>פרטי ספק</h2>
-            <p>
-              <strong>שם:</strong> {modalData.name}
-            </p>
-            <p>
-              <strong>טלפון:</strong> {modalData.phone}
-            </p>
-            <button className="button" onClick={closeModal}>
-              סגור
-            </button>
-          </div>
-        </div>
       )}
     </div>
   );

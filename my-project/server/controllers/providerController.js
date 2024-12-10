@@ -34,6 +34,7 @@ const GetServiceRequests = async (req, res) => {
       sr.cityId, 
       sr.createdAt, 
       sr.title, 
+      srp.price AS providerPrice,
       status, 
       si.path AS imagePath
     FROM 

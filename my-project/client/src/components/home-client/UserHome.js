@@ -62,12 +62,14 @@ const UserHome = ({ user }) => {
         data.append("providers[]", provider); // הוספת כל ספק תחת השם "providers[]"
       });
       const response = await axios.post("/api/user/create-service", data);
+      //alert("Service request added successfully!");
+      showPopupMessage("הבקשה נשמרה בהצלחה!");
 
-      showPopupMessage("Service request added successfully!");
       setRequests((prevRequests) => [...prevRequests, response.data]);
     } catch (err) {
-      console.error(err.response.data.message);
-      showPopupMessage(err.response.data.message);
+      const errorMessage = err.response?.data?.message || "השמירה של הבקשה ניכשלה"; // אם אין הודעת שגיאה, הצג את הודעת ברירת המחדל
+  console.error(errorMessage); // הדפסת השגיאה בקונסול
+  showPopupMessage(errorMessage); // הצגת השגיאה בהודעת פופאפ
     }
   };
 
