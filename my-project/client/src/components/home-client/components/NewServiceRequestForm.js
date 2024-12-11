@@ -1,78 +1,9 @@
-// import React, { useState } from "react";
-// import "./ServiceRequestForm.css";
 
-// function ServiceRequestForm({ onSubmit, cities }) {
-//   const [title, setTitle] = useState("");
-//   const [details, setDetails] = useState("");
-//   const [cityId, setCityId] = useState("");
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-
-//     // הוצאת הנתונים לשימוש ב- UserHome
-//     const serviceRequestData = {
-//       title,
-//       details,
-//       cityId,
-
-//     };
-
-//     // שליחת הנתונים ל-UserHome
-//     onSubmit(serviceRequestData);
-//   };
-
-//   return (
-//     <form className="service-request-form" onSubmit={handleSubmit}>
-
-//       <div className="form-group title-group">
-//         <label htmlFor="title">כותרת:</label>
-//         <input
-//           type="text"
-//           id="title"
-//           value={title}
-//           onChange={(e) => setTitle(e.target.value)}
-//           required
-//         />
-//       </div>
-//       <div className="form-group details-group">
-//         <label htmlFor="details">פרטים:</label>
-//         <textarea
-//           id="details"
-//           value={details}
-//           onChange={(e) => setDetails(e.target.value)}
-//           required
-//         />
-//       </div>
-//       <div className="form-group city-group">
-//         <label htmlFor="cityId">עיר:</label>
-//         <select
-//           id="cityId"
-//           value={cityId}
-//           onChange={(e) => setCityId(e.target.value)}
-//           required
-//         >
-//           <option value="">בחר עיר</option>
-//           {cities.map((city) => (
-//             <option key={city.id} value={city.id}>
-//               {city.city_name}
-//             </option>
-//           ))}
-//         </select>
-//       </div>
-
-//       <button className="submit-button" type="submit">
-//         שלח
-//       </button>
-//     </form>
-//   );
-// }
-
-// export default ServiceRequestForm;
-
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./ServiceRequestForm.css";
 
-function ServiceRequestForm({ onSubmit, cities, cityFilter, setCityFilter }) {
+function ServiceRequestForm({ onSubmit, cities, cityFilter, setCityFilter, resetForm }) {
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
   const [cityId, setCityId] = useState("");
@@ -93,6 +24,12 @@ function ServiceRequestForm({ onSubmit, cities, cityFilter, setCityFilter }) {
     onSubmit(formData);
   };
 
+  useEffect(() => {
+    if (resetForm) {
+      handleReset();
+    }
+  }, [resetForm]);
+
   const handleReset = () => {
     setTitle("");
     setDetails("");
@@ -111,7 +48,7 @@ function ServiceRequestForm({ onSubmit, cities, cityFilter, setCityFilter }) {
   };
 
   return (
-    <> <p>אנא מלא פרטי הבקשה:</p><br/>
+    <> <p>מלא את פרטי הבקשה, וסמן את בעלי המקצוע שמהם תרצה לקבל הצעות מחיר:</p><br/>
       <form className="form-container" onSubmit={handleSubmit}>
        
         <label className="form-item" htmlFor="cityId">
@@ -207,7 +144,6 @@ function ServiceRequestForm({ onSubmit, cities, cityFilter, setCityFilter }) {
           </div>
         ))}
       </div>
-      <p>אנא סמן את בעלי מקצוע שמהם תרצה לקבל הצעות מחיר:</p>
     </>
   );
 }

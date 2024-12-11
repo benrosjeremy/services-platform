@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import PriceOffers from "../components/PriceOffers"; // ייבוא הקומפוננטה החדשה
+import PriceOffers from "../components/PriceOffers";
+import ProviderPopup from "../components/ProviderPopup"; // ייבוא קומפוננטת ProviderPopup
 import "./ClientRequestsHistory.css";
 
 const ClientRequestsHistory = ({ clientId }) => {
@@ -10,6 +11,8 @@ const ClientRequestsHistory = ({ clientId }) => {
     date: "",
     type: "all",
   });
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState(null);
 
   useEffect(() => {
     const loadRequests = async () => {
@@ -30,6 +33,11 @@ const ClientRequestsHistory = ({ clientId }) => {
     setFilters((prevFilters) => ({ ...prevFilters, [key]: value }));
   };
 
+  const handlePopupToggle = (provider) => {
+    setSelectedProvider(provider);
+    setIsPopupOpen(!isPopupOpen);
+  };
+
   const filteredRequests = requests
     .filter((request) => {
       const { status, date, type } = filters;
@@ -45,6 +53,7 @@ const ClientRequestsHistory = ({ clientId }) => {
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
+    <>
     <div className="page-container">
       <h1 className="page-header">היסטוריית בקשות</h1>
 
@@ -89,14 +98,14 @@ const ClientRequestsHistory = ({ clientId }) => {
           <div key={request.id} className="request-card">
             <p>{request.categoryIcon}</p>
             <p>
+              <strong>{request.title}</strong> 
+            </p>
+            <p>
               <strong>תיאור הבעיה:</strong> {request.details}
             </p>
             <p>
               <strong>תאריך:</strong>{" "}
               {new Date(request.createdAt).toLocaleDateString()}
-            </p>
-            <p>
-              <strong>סטטוס:</strong> {request.status}
             </p>
             {request.status === "אושר" && (
               <p>
@@ -109,13 +118,36 @@ const ClientRequestsHistory = ({ clientId }) => {
             <p>
               <strong>עיר:</strong> {request.cityName}
             </p>
-
+            {request.serviceImages?.length > 0 && (
+              <div className="images-container">
+                {request.serviceImages.map((imagePath, index) => (
+                  <img
+                    key={index}
+                    src={`/images/${imagePath.path}`}
+                    className="thumbnail1"
+                  />
+                ))}
+              </div>
+            )}
             {/* Price Offers Component */}
-            <PriceOffers providers={request.serviceProviders} />
+            <PriceOffers
+              providers={request.serviceProviders}
+              onPopupToggle={handlePopupToggle}
+            />
           </div>
         ))
       )}
+
+      
     </div>
+    {/* Render Provider Popup */}
+    {isPopupOpen && selectedProvider && (
+      <ProviderPopup
+        provider={selectedProvider}
+        onClose={handlePopupToggle}
+      />
+    )}
+    </>
   );
 };
 

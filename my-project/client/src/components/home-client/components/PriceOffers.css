@@ -52,3 +52,110 @@
 .provider-card p strong {
   color: #333;
 }
+
+/* PriceOffers.css */
+
+/* עיצוב כפתור "פתח הצעות מחיר" */
+.toggle-offers-button {
+  width: 100%; /* הכפתור יתפוס את כל רוחב השורה */
+  background-color: #f0f0f0; /* אפור בהיר מאוד */
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-offers-button:hover {
+  background-color: #e0e0e0; /* שינוי צבע בעת ריחוף */
+}
+
+.toggle-offers-button .arrow-icon {
+  margin-left: 10px; /* ריווח בין הטקסט לאייקון */
+  font-size: 18px;
+}
+
+.open .toggle-offers-button .arrow-icon {
+  transform: rotate(180deg); /* אם הצעות המחיר פתוחות, לסובב את החץ כלפי מעלה */
+  transition: transform 0.3s ease;
+}
+/* PriceOffers.css */
+
+/* עיצוב כפתור "פתח הצעות מחיר" */
+.toggle-offers-button {
+  width: 100%; /* הכפתור יתפוס את כל רוחב השורה */
+  background-color: #f0f0f0; /* אפור בהיר מאוד */
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: black;
+}
+
+.toggle-offers-button:hover {
+  background-color: #e0e0e0; /* שינוי צבע בעת ריחוף */
+}
+
+.toggle-offers-button .arrow-icon {
+  margin-left: 10px; /* ריווח בין הטקסט לאייקון */
+  font-size: 18px;
+  transition: transform 0.3s ease; /* אנימציה של סיבוב החץ */
+}
+
+/* אם הצעות המחיר פתוחות, לסובב את החץ כלפי מעלה */
+.toggle-offers-button.open .arrow-icon {
+  transform: rotate(180deg); /* סיבוב החץ */
+}
+.offers-list {
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+  max-height: 0; /* סגור את הרשימה בהתחלה */
+}
+
+/* כשהצעות המחיר פתוחות */
+.offers-list.open {
+  max-height: 2000px; /* מספיק גבוה כדי להציג את כל התוכן. ניתן לשנות לפי הצורך */
+}
+
+/* כשהצעות המחיר סגורות */
+.offers-list.closed {
+  max-height: 0; /* חבוי */
+}
+
+/* CSS for PriceOffers.css */
+
+/* אנימציה של החץ */
+.arrow-icon {
+  transition: transform 0.2s ease-in-out; /* שינוי באנימציה */
+}
+
+.arrow-icon.rotate {
+  transform: rotate(180deg); /* חץ שיתהפך */
+}
+
+/* אנימציה לסגירה ופתיחה של הצעות המחיר */
+.offers-list {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out; /* אנימציות גם על max-height וגם על opacity */
+}
+
+.offers-list.open {
+  max-height: 1000px; /* ערך גבוה בשביל לאפשר את הצגת התוכן */
+  opacity: 1; /* הצגת התוכן */
+}
+
+.offers-list.closed {
+  max-height: 0;
+  opacity: 0; /* הסתרת התוכן */
+}

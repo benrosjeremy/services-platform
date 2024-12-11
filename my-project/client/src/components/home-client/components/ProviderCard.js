@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import AddReviewForm from "./AddReviewForm"; // ייבוא הקומפוננטה החדשה
+import ProviderPopup from "./ProviderPopup"; // ייבוא הקומפוננטה החדשה
 
 const ProviderCard = ({ service, isSelected, onSelectionChange }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -84,98 +85,33 @@ const ProviderCard = ({ service, isSelected, onSelectionChange }) => {
             {/* מספר הביקורות */}
           </div>
           <div className="flex justify-between items-center mt-4">
-            <button
+            
+            
+          <input
+  type="checkbox"
+  id={`customCheckbox-${service.id}`} 
+  checked={isSelected}
+  onChange={handleCheckboxChange}
+  className="custom-checkbox"
+/>
+<label htmlFor={`customCheckbox-${service.id}`} className="checkbox-label">
+  קבל ממני הצעת מחיר
+</label>
+<button
               onClick={togglePopup}
               className="text-white px-4 py-2 rounded transition-colors details-button"
             >
               פרטים נוספים
             </button>
-            <input
-              type="checkbox"
-              checked={isSelected}
-              onChange={handleCheckboxChange}
-              className="form-checkbox text-blue-500"
-            />
           </div>
         </div>
       </div>
 
-      {/* Popup */}
       {isPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="popup-container bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative h-[530px]">
-            <button
-              onClick={togglePopup}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-            >
-              ✖
-            </button>
-            <h3 className="text-xl font-semibold mb-4">{service.title}</h3>
-            <img
-              src={`/images/${service.logo}`}
-              alt={service.title}
-              className="w-full h-48 object-cover logo-image mb-4"
-            />
-            <p className="text-gray-600 mb-4">{service.name}</p>
-            <p className="text-gray-600 mb-4">{service.city}</p>
-
-            {/* רשימת ביקורות */}
-            <h4 className="text-lg font-semibold mb-2">ביקורות:</h4>
-            <div className="reviews-container">
-              {reviews.length === 0 ? (
-                <p className="text-gray-500">אין ביקורות זמינות.</p>
-              ) : (
-                <ul className="space-y-2">
-                  {reviews.map((review, index) => (
-                    <li
-                      key={index}
-                      className="bg-gray-100 p-4 rounded shadow-sm"
-                    >
-                      <div className="flex justify-between items-center mb-2">
-                        {/* תצוגת דירוג כוכבים */}
-                        <div className="flex items-center">
-                          {[...Array(5)].map((_, idx) => (
-                            <Star
-                              key={idx}
-                              className={`w-4 h-4 ${
-                                idx < review.rating
-                                  ? "text-yellow-400"
-                                  : "text-gray-300"
-                              }`}
-                            />
-                          ))}
-                          <span className="ml-2 text-gray-600 text-sm">
-                            {review.reviewer_name}
-                          </span>
-                        </div>
-                        {/* תאריך יצירת הביקורת */}
-                        <span className="text-gray-500 text-xs">
-                          {new Date(review.created_at).toLocaleDateString(
-                            "he-IL"
-                          )}
-                        </span>
-                      </div>
-                      <p className="text-gray-700">{review.review_text}</p>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            {isAddingReview ? (
-              <AddReviewForm
-                onSubmit={handleAddReview}
-                onCancel={() => setIsAddingReview(false)}
-              />
-            ) : (
-              <button
-                onClick={() => setIsAddingReview(true)}
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors mt-4"
-              >
-                הוסף ביקורת חדשה
-              </button>
-            )}
-          </div>
-        </div>
+        <ProviderPopup
+          provider={service}
+          onClose={togglePopup}
+        />
       )}
     </>
   );

@@ -461,24 +461,22 @@ const createServiceRequest = (req, res) => {
                   }
                 );
               }
-                    // סיום הטרנזקציה
-                    db.commit((err) => {
-                      if (err) {
-                        console.error("Error committing transaction:", err);
-                        return db.rollback(() => {
-                          res
-                            .status(500)
-                            .json({ message: "Error committing transaction" });
-                        });
-                      }
+              // סיום הטרנזקציה
+              db.commit((err) => {
+                if (err) {
+                  console.error("Error committing transaction:", err);
+                  return db.rollback(() => {
+                    res
+                      .status(500)
+                      .json({ message: "Error committing transaction" });
+                  });
+                }
 
-                      res.status(201).json({
-                        message: "Service request added successfully",
-                      });
-                    });
-                  }
-              
-            );
+                res.status(201).json({
+                  message: "Service request added successfully",
+                });
+              });
+            });
           }
         );
       }
@@ -582,7 +580,7 @@ const GetProviders = async (req, res) => {
   const query = `
     SELECT 
       sp.*,
-      c.city_name AS city_name
+      c.city_name AS city
     FROM 
       service_web.service_providers sp
     LEFT JOIN 

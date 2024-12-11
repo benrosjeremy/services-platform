@@ -165,7 +165,7 @@ label {
 }
 
 /* Responsiveness */
-@media (max-width: 768px) {
+@media (max-width: 1500px) {
   .service-request-form {
     padding: 15px;
     flex-direction: column;
@@ -311,4 +311,128 @@ label {
 
 .button-input {
   height: 2.6rem;
+}
+/* Responsiveness */
+@media (max-width: 1500px) {
+  .service-request-form,
+  .service-request-form-new,
+  .service-request-form-form {
+    padding: 15px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-group {
+    flex-basis: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .form-item,
+  .form-input {
+    width: 100%; /* מבטיח שהשדות יתפסו את כל רוחב המסך */
+    max-width: 100%;
+  }
+
+  .form-buttons {
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px; /* רווח בין הכפתורים */
+  }
+
+  .submit-button,
+  .reset-button {
+    width: 100%;
+    padding: 12px 0;
+  }
+
+  .image-preview {
+    flex-direction: column; /* מציג את התמונות בשורה אחת במובייל */
+    gap: 10px; /* רווח בין התמונות */
+  }
+
+  .image-preview-thumbnail {
+    width: 100%; /* רוחב התמונה יתפוס 100% מהמיכל */
+    height: auto;
+  }
+
+  .image-input {
+    width: 100%; /* שדה העלאת התמונה יתפוס 100% */
+  }
+
+  .image-button {
+    width: 100%; /* כפתור העלאת תמונות יתפוס 100% */
+  }
+}
+
+/* טווח למכשירים מאוד קטנים (עד 480px) */
+@media (max-width: 480px) {
+  .form-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-input {
+    font-size: 14px; /* קטן את הגודל למכשירים קטנים יותר */
+    padding: 0.5rem;
+  }
+
+  .image-input {
+    font-size: 14px;
+    padding: 0.5rem;
+  }
+
+  .image-preview-thumbnail {
+    height: 80px; /* הקטנה של התמונות במובייל */
+  }
+
+  .image-button {
+    font-size: 14px;
+  }
+}@media (max-width: 1500px) {
+  .form-container {
+    flex-direction: column; /* בטלפונים ובמסכים קטנים נציג את הטופס לאורך */
+  }
+
+  .form-item {
+    flex-basis: 100%; /* כל שדה יתפוס 100% */
+  }
+
+  .form-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .submit-button,
+  .reset-button {
+    width: 100%;
+  }
+
+  .image-preview {
+    justify-content: center;
+  }
+
+  .image-preview-thumbnail {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 10px;
+  }
+
+  .submit-button,
+  .reset-button {
+    width: 100%;
+  }
+
+  .form-item {
+    margin-bottom: 0.8rem;
+  }
+
+  .image-preview-thumbnail {
+    width: 70px;
+    height: 70px;
+  }
 }

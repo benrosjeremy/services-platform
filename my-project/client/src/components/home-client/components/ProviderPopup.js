@@ -7,6 +7,7 @@ const ProviderPopup = ({ provider, onClose }) => {
   const [isAddingReview, setIsAddingReview] = useState(false);
 
   const fetchReviews = () => {
+    console.log(provider);
     fetch(`/api/user/get-reviews?providerId=${provider.id}`)
       .then((response) => response.json())
       .then((data) => {
@@ -29,7 +30,7 @@ const ProviderPopup = ({ provider, onClose }) => {
       .then((data) => {
         if (data.success) {
           setReviews((prevReviews) => [...prevReviews, newReview]);
-          fetchReviews()
+          fetchReviews();
           setIsAddingReview(false);
         }
       })
@@ -38,14 +39,16 @@ const ProviderPopup = ({ provider, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="popup-container bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative h-[530px]">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-        >
-          ✖
-        </button>
-        <h3 className="text-xl font-semibold mb-4">{provider.title}</h3>
+      <div className="popup-container bg-white rounded-lg shadow-lg max-w-md w-full relative h-[530px]">
+        <div className="title-sticky">
+          <button
+            onClick={onClose}
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+          >
+            ✖
+          </button>
+          <h3 className="text-xl font-semibold">{provider.title}</h3>
+        </div>
         <img
           src={`/images/${provider.logo}`}
           alt={provider.title}
@@ -53,6 +56,9 @@ const ProviderPopup = ({ provider, onClose }) => {
         />
         <p className="text-gray-600 mb-4">{provider.name}</p>
         <p className="text-gray-600 mb-4">{provider.city}</p>
+        <p className="text-gray-600 mb-4">{provider.email}</p>
+        <p className="text-gray-600 mb-4">{provider.phone}</p>
+        <p className="text-gray-600 mb-4">{provider.service_description}</p>
 
         {/* רשימת ביקורות */}
         <h4 className="text-lg font-semibold mb-2">ביקורות:</h4>
@@ -98,7 +104,7 @@ const ProviderPopup = ({ provider, onClose }) => {
         ) : (
           <button
             onClick={() => setIsAddingReview(true)}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors mt-4"
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors mt-4 button-review"
           >
             הוסף ביקורת חדשה
           </button>

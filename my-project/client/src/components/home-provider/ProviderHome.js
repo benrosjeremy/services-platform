@@ -7,11 +7,14 @@ const ProviderHome = ({ provider }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [filterStatus, setFilterStatus] = useState("all"); // מצב הסינון לפי סטטוס
+  const [priceInput, setPriceInput] = useState(""); // state לניהול ערך הקלט עבור הצעת המחיר
+  const [currentRequestId, setCurrentRequestId] = useState(null); // track the current request for price input
 
   const handleImageClick = (imagePath, request) => {
     setSelectedImage(imagePath);
     setSelectedRequest(request);
-    setCurrentImageIndex(request.images.indexOf(imagePath)); // מעדכן את האינדקס של התמונה שנבחרה
+    setCurrentImageIndex(request.images.indexOf(imagePath)); // מעדכן את אינדקס התמונה שנבחרה
   };
 
   const closeModal = () => {
@@ -31,25 +34,34 @@ const ProviderHome = ({ provider }) => {
     );
   };
 
+  const loadRequests = async () => {
+    try {
+      const response = await axios.post("/api/provider/get-service-requests", {
+        providerId: provider.id,
+      });
+      console.log(response.data);
+      setRequests(response.data);
+    } catch (error) {
+      console.error("Error loading requests:", error);
+    }
+  };
+
   useEffect(() => {
-    const loadRequests = async () => {
-      try {
-        const response = await axios.post(
-          "/api/provider/get-service-requests",
-          {
-            providerId: provider.id,
-          }
-        );
-        setRequests(response.data);
-      } catch (error) {
-        console.error("Error loading requests:", error);
-      }
-    };
     if (provider) loadRequests();
   }, [provider]);
 
-  const handleApprove = async (requestId) => {
-    const price = prompt("אנא הכנס את הצעת המחיר:");
+  // סינון הבקשות לפי הסטטוס שנבחר
+  const filteredRequests = requests.filter((request) => {
+    if (filterStatus === "all") return true;
+    return request.status === filterStatus;
+  });
+
+  const handleApprove = (requestId) => {
+    setCurrentRequestId(requestId); // עדכון ה-ID של הבקשה הנוכחית
+  };
+
+  const handleSubmitPrice = async () => {
+    const price = parseFloat(priceInput);
     if (!price || isNaN(price) || price <= 0) {
       alert("אנא הכנס סכום תקין להצעת המחיר.");
       return;
@@ -59,13 +71,17 @@ const ProviderHome = ({ provider }) => {
         providerId: provider.id,
         price,
         status: "אושר",
-        requestId,
+        requestId: currentRequestId,
       });
       setRequests((prevRequests) =>
         prevRequests.map((req) =>
-          req.id === requestId ? { ...req, status: "אושר", price } : req
+          req.id === currentRequestId
+            ? { ...req, status: "אושר", providerPrice: price }
+            : req
         )
       );
+      setPriceInput(""); // מאפס את שדה הקלט
+      setCurrentRequestId(null); // מאפס את ה-ID של הבקשה הנוכחית
     } catch (error) {
       console.error("Error approving request:", error);
     }
@@ -102,13 +118,28 @@ const ProviderHome = ({ provider }) => {
   return (
     <div className="page-container">
       <h1 className="page-header">בקשות שהתקבלו</h1>
-      {requests.map((request) => (
+
+      {/* Dropdown לסינון סטטוס */}
+      <div className="filter-status">
+        <label>סינון לפי סטטוס:</label>
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+        >
+          <option value="all">הכל</option>
+          <option value="בהמתנה">בהמתנה</option>
+          <option value="אושר">אושר</option>
+          <option value="נדחה">נדחה</option>
+        </select>
+      </div>
+
+      {filteredRequests.map((request) => (
         <div key={request.id} className="request-card">
           <p>
             <strong>תיאור הבעיה:</strong> {request.details}
           </p>
           <p>
-            <strong>עיר:</strong> {request.cityId}
+            <strong>עיר:</strong> {request.city}
           </p>
           <p>
             <strong>תאריך:</strong>{" "}
@@ -116,9 +147,15 @@ const ProviderHome = ({ provider }) => {
           </p>
           <p>
             <strong>סטטוס:</strong> {request.status}
-      {request.providerPrice}
           </p>
-        
+
+          {request.status === "אושר" && (
+            <p>
+              <strong>הצעת המחיר: </strong>
+              {request.providerPrice} ש"ח
+            </p>
+          )}
+
           {request.images?.length > 0 && (
             <div className="images-container">
               {request.images.map((imagePath, index) => (
@@ -134,19 +171,42 @@ const ProviderHome = ({ provider }) => {
           )}
 
           {request.status === "בהמתנה" && (
-            <div className="button-container">
-              <button
+            <div>
+              <p className="price-container">
+                <strong>הצעת המחיר: </strong>
+                <input
+                  type="number"
+                  placeholder="הכנס הצעת מחיר"
+                  value={priceInput}
+                  className="form-input price-input"
+                  onChange={(e) => {
+                    setPriceInput(e.target.value);
+                    handleApprove(request.id);
+                  }}
+                />
+              </p>
+
+              <div className="button-container">
+                {/* <button
                 className="button approve-button"
                 onClick={() => handleApprove(request.id)}
               >
-                מלאות הצעת מחיר
-              </button>
-              <button
-                className="button reject-button"
-                onClick={() => handleReject(request.id)}
-              >
-                דחה בקשה
-              </button>
+                מלא הצעת מחיר
+              </button> */}
+                <button
+                  className="button approve-button"
+                  onClick={handleSubmitPrice}
+                >
+                  שלח הצעה
+                </button>
+
+                <button
+                  className="button reject-button"
+                  onClick={() => handleReject(request.id)}
+                >
+                  דחה בקשה
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -172,8 +232,8 @@ const ProviderHome = ({ provider }) => {
                 &#10094;
               </button>
               <div className="dots-container">
-              {renderDots(selectedRequest.images)}
-            </div>
+                {renderDots(selectedRequest.images)}
+              </div>
               <button
                 onClick={() => handleNextImage(selectedRequest)}
                 className="next-button"
@@ -181,7 +241,6 @@ const ProviderHome = ({ provider }) => {
                 &#10095;
               </button>
             </div>
-            
           </div>
         </div>
       )}

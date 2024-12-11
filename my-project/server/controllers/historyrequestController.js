@@ -29,7 +29,7 @@ SELECT
                 'id', p.id,
                 'name', p.name,
                 'phone', p.phone,
-                'city_id', p.city_id,
+                'city', c.city_name,
                 'email', p.email,
                 'logo', p.logo,
                 'title', p.title,
@@ -39,6 +39,7 @@ SELECT
         )
         FROM service_request_providers srp
         JOIN service_providers p ON srp.serviceProviderId = p.id
+        LEFT JOIN cities c ON p.city_id = c.id
         WHERE srp.serviceRequestId = sr.id
     ) AS serviceProviders,
     

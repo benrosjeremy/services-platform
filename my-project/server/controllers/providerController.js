@@ -28,10 +28,10 @@ const GetServiceRequests = async (req, res) => {
   console.log("providerID:", { providerId });
 
   const sql = `
-    SELECT 
+   SELECT 
       sr.id AS serviceRequestId, 
       sr.details, 
-      sr.cityId, 
+      c.city_name as city, 
       sr.createdAt, 
       sr.title, 
       srp.price AS providerPrice,
@@ -43,6 +43,7 @@ const GetServiceRequests = async (req, res) => {
       service_web.service_request_providers srp ON sr.id = srp.serviceRequestId
     LEFT JOIN 
       service_web.service_images si ON sr.id = si.serviceRequestId
+      Left Join service_web.cities c on c.id=sr.cityId
     WHERE 
       srp.serviceProviderId = ?
     ORDER BY 
@@ -59,11 +60,12 @@ const GetServiceRequests = async (req, res) => {
         const {
           serviceRequestId,
           details,
-          cityId,
+          city,
           createdAt,
           title,
           status,
           imagePath,
+          providerPrice,
         } = row;
 
         // בדוק אם ה-service כבר נמצא ברשימה
@@ -73,11 +75,12 @@ const GetServiceRequests = async (req, res) => {
           service = {
             id: serviceRequestId,
             details,
-            cityId,
+            city,
             createdAt,
             title,
             status,
             images: [],
+            providerPrice,
           };
           acc.push(service);
         }

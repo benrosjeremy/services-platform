@@ -117,6 +117,15 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.thumbnail1 {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
 /* מודאל */
 .modal-overlay {
   position: fixed;
@@ -232,4 +241,18 @@
   padding: 0 50px; /* רווחים מהקצוות */
   box-sizing: border-box; /* מוודא שה-padding נכלל בתוך הרוחב הכולל */
   font-size: 20px;
+}
+
+.price-container {
+  display: flex;
+  align-items: center; /* מוודא שהטקסט וה-input יהיו באותו גובה */
+}
+
+.form-input.price-input {
+  width: 200px;
+  margin-right: 10px; /* רווח בין הטקסט ל-input */
+}
+
+.filter-status{
+  margin-bottom: 15px;
 }

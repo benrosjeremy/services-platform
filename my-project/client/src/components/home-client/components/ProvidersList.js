@@ -5,6 +5,7 @@ const ProvidersList = ({
   categoryFilter,
   cityFilter,
   onSelectedProvidersChange,
+  resetForm
 }) => {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,9 +30,15 @@ const ProvidersList = ({
         setLoading(false);
       }
     };
-
+    if (resetForm) {
+      handleReset();
+    }
     fetchProviders();
-  }, []);
+  }, [resetForm]);
+
+  const handleReset = () => {
+    setSelectedProviders([]);
+  };
 
   // עדכון רשימת הספקים שנבחרו
   const handleProviderSelection = (id, isSelected) => {

@@ -21,6 +21,7 @@ const UserHome = ({ user }) => {
   const [requests, setRequests] = useState([]);
   const [selectedProviders, setSelectedProviders] = useState([]);
   const { showPopupMessage } = usePopup();
+  const [resetForm, setResetForm] = useState(false);
 
   const handleSelectedProvidersChange = (selected) => {
     console.log("Checkbox changed" + selected);
@@ -64,12 +65,13 @@ const UserHome = ({ user }) => {
       const response = await axios.post("/api/user/create-service", data);
       //alert("Service request added successfully!");
       showPopupMessage("הבקשה נשמרה בהצלחה!");
-
       setRequests((prevRequests) => [...prevRequests, response.data]);
+      setResetForm(true);
+      setTimeout(() => setResetForm(false), 0); // החזרת הערך ל-false לאחר רגע קצר
     } catch (err) {
       const errorMessage = err.response?.data?.message || "השמירה של הבקשה ניכשלה"; // אם אין הודעת שגיאה, הצג את הודעת ברירת המחדל
-  console.error(errorMessage); // הדפסת השגיאה בקונסול
-  showPopupMessage(errorMessage); // הצגת השגיאה בהודעת פופאפ
+      console.error(errorMessage); // הדפסת השגיאה בקונסול
+      showPopupMessage(errorMessage); // הצגת השגיאה בהודעת פופאפ
     }
   };
 
@@ -95,6 +97,7 @@ const UserHome = ({ user }) => {
               cities={cities}
               cityFilter={cityFilter}
               setCityFilter={setCityFilter}
+              resetForm={resetForm}
             />
           </div>
           {/* {categoryFilter && (
@@ -119,6 +122,7 @@ const UserHome = ({ user }) => {
           categoryFilter={categoryFilter}
           cityFilter={cityFilter}
           onSelectedProvidersChange={handleSelectedProvidersChange}
+          resetForm={resetForm}
         />
 
         <WhyChooseUs />

@@ -85,7 +85,6 @@ section h2 {
 .popup-container {
   max-height: 95vh;
   overflow-y: auto;
-  padding-right: 10px;
 }
 .category-list {
   padding-top: 15px;
@@ -163,7 +162,6 @@ section h2 {
   border-color: #4b8947;
 }
 
-
 .proviser-popup-overlay {
   position: fixed;
   top: 0;
@@ -204,5 +202,64 @@ section h2 {
   color: black;
 }
 
+/* התאמת המראה של checkbox */
+.custom-checkbox {
+  appearance: none; /* הסרת העיצוב המובנה של הדפדפן */
+  -webkit-appearance: none; /* התאמה ל-Webkit */
+  -moz-appearance: none; /* התאמה ל-Firefox */
+  width: 30px; /* רוחב ה-checkbox */
+  height: 30px; /* גובה ה-checkbox */
+  border: 2px solid #ccc; /* גבול */
+  border-radius: 3px; /* פינות מעוגלות */
+  background-color: #fff; /* צבע רקע */
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
 
+/* מצב מסומן */
+.custom-checkbox:checked {
+  background-color: #4caf50; /* צבע רקע במצב מסומן */
+  border-color: #4caf50; /* צבע גבול במצב מסומן */
+}
 
+/* סימן V */
+.custom-checkbox:checked::after {
+  content: "✔"; /* תוכן של הסימן */
+  color: white; /* צבע של הסימן */
+  font-size: 20px; /* גודל הטקסט של הסימן */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 20px; /* יישור הסימן בתוך ה-checkbox */
+}
+
+/* עיצוב טקסט ליד ה-checkbox */
+.checkbox-label {
+  margin-left: 10px; /* ריווח בין ה-checkbox לטקסט */
+  font-size: 16px;
+  color: #333;
+  cursor: pointer; /* עכבר של קליק */
+}
+
+.input-button-container {
+  display: flex;
+  margin-right: 10px;
+}
+
+.title-sticky {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f6f7f6;
+  padding: 10px 20px;
+  font-family: "Roboto", sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.button-review {
+  margin-bottom: 20px;
+}
