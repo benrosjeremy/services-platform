@@ -272,14 +272,37 @@ const transporter = nodemailer.createTransport({
 
 //   return transporter.sendMail(mailOptions);
 // };
+// const sendMailToProvider = async (email, serviceRequestTitle) => {
+//   const mailOptions = {
+//     from: process.env.GMAIL_USER,
+//     to: email,
+//     subject: "בקשת שירות חדשה",
+//     text: `שלום,\n\nיש לך בקשת שירות חדשה: ${serviceRequestTitle}.\nאנא היכנס למערכת לצפייה בפרטים נוספים.\n\nבברכה,\nהמקצוען`,
+//   };
 const sendMailToProvider = async (email, serviceRequestTitle) => {
   const mailOptions = {
-    from: process.env.GMAIL_USER,
+    from: `"המקצוען" <${process.env.GMAIL_USER}>`, // שם שולח + אימייל
     to: email,
-    subject: "בקשת שירות חדשה",
-    text: `שלום,\n\nיש לך בקשת שירות חדשה: ${serviceRequestTitle}.\nאנא היכנס למערכת לצפייה בפרטים נוספים.\n\nבברכה,\nהמקצוען`,
-  };
+    subject: "בקשת שירות חדשה מחכה לך!",
+    text: `
+      שלום רב,
 
+      יש לך בקשת שירות חדשה: "${serviceRequestTitle}".
+      אנא היכנס למערכת שלנו לצפייה בפרטים נוספים.
+
+      בברכה,
+      צוות המקצוען
+    `,
+    html: `
+      <div style="direction: rtl; font-family: Arial, sans-serif; line-height: 1.8;">
+        <h2 style="color: #4CAF50;">שלום רב,</h2>
+        <p>יש לך בקשת שירות חדשה: <strong>"${serviceRequestTitle}"</strong>.</p>
+        <p>אנא <a href="https://example.com/login" target="_blank" style="color: #2196F3;">היכנס למערכת</a> לצפייה בפרטים נוספים.</p>
+        <hr />
+        <p style="color: #555;">בברכה,<br>צוות המקצוען</p>
+      </div>
+    `,
+  };
   try {
     await transporter.sendMail(mailOptions);
   } catch (err) {

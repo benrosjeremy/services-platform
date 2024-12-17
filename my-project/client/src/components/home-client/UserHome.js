@@ -58,7 +58,7 @@ const UserHome = ({ user }) => {
       // data.serviceCategoryId = 1;
 
       data.append("userId", user.user_id);
-      data.append("serviceCategoryId", 1);
+      data.append("serviceCategoryId", categoryFilter);
       selectedProviders.forEach((provider) => {
         data.append("providers[]", provider); // הוספת כל ספק תחת השם "providers[]"
       });
@@ -69,7 +69,8 @@ const UserHome = ({ user }) => {
       setResetForm(true);
       setTimeout(() => setResetForm(false), 0); // החזרת הערך ל-false לאחר רגע קצר
     } catch (err) {
-      const errorMessage = err.response?.data?.message || "השמירה של הבקשה ניכשלה"; // אם אין הודעת שגיאה, הצג את הודעת ברירת המחדל
+      const errorMessage =
+        err.response?.data?.message || "השמירה של הבקשה ניכשלה"; // אם אין הודעת שגיאה, הצג את הודעת ברירת המחדל
       console.error(errorMessage); // הדפסת השגיאה בקונסול
       showPopupMessage(errorMessage); // הצגת השגיאה בהודעת פופאפ
     }
@@ -100,24 +101,7 @@ const UserHome = ({ user }) => {
               resetForm={resetForm}
             />
           </div>
-          {/* {categoryFilter && (
-    <div className={`new-service-form-container ${categoryFilter ? "open" : ""}`}>
-      <NewServiceRequestForm
-        onSubmit={handleNewServiceRequest}
-        cities={cities}
-        cityFilter={cityFilter}
-        setCityFilter={setCityFilter}
-      />
-    </div>
-  )} */}
         </div>
-        {/* <SearchSection
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          location={location}
-          setLocation={setLocation}
-        /> */}
-
         <ProvidersList
           categoryFilter={categoryFilter}
           cityFilter={cityFilter}

@@ -29,7 +29,7 @@ button {
 }
 
 /* Logo styles */
-.logo-link {
+/* .logo-link {
   display: flex;
   align-items: center;
   color: #fff;
@@ -41,18 +41,61 @@ button {
   letter-spacing: 2px;
   margin-right: 15px;
   text-transform: uppercase;
-}
-
-/* Welcome message */
-.welcome-message {
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.user-name {
-  margin-left: 15px;
+} */
+/* Logo link styles */
+/* Logo Link */
+.logo-link {
+  display: flex;
+  align-items: center; /* יישור אנכי */
+  justify-content: start; /* יישור אופקי */
+  color: #ffffff; /* צבע לבן */
+  text-decoration: none;
+  font-family: "Roboto", sans-serif;
   font-weight: bold;
-  color: #ffe082;
+  font-size: 1.8rem; /* גודל הטקסט */
+  gap: 5px; /* מרווח קטן יותר בין הלוגו לטקסט */
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.logo-link:hover {
+  color: #ffe082; /* גוון צהוב בהיר */
+  transform: scale(1.05); /* הגדלה בעת מעבר עכבר */
+}
+
+/* Logo Image */
+.main-logo-image {
+  display: block;
+  max-width: 70px; /* גודל הלוגו */
+  height: auto; /* התאמת גובה אוטומטית */
+  object-fit: contain; /* שמירת פרופורציות */
+  border-radius: 30%; /* אם צריך עיגול */
+  background: transparent; /* רקע שקוף */
+  filter: brightness(0) invert(1); /* צבע לבן ללוגו */
+  padding: 5px; /* רווח פנימי */
+}
+
+/* Welcome message container */
+.welcome-message {
+  font-family: "Roboto", sans-serif; /* פונטים מקצועיים */
+  font-size: 1.2rem; /* גודל טקסט בסיסי */
+  font-weight: 500; /* משקל בינוני */
+  color: #2e7d32; /* ירוק כהה */
+  background-color: #e8f5e9; /* רקע ירוק בהיר */
+  padding: 10px 15px; /* רווח פנימי */
+  border-radius: 10px; /* פינות מעוגלות */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* צל עדין */
+  display: inline-block;
+  text-align: center; /* טקסט באמצע */
+}
+
+/* Highlighted user name */
+.user-name {
+  font-weight: bold; /* טקסט מודגש */
+  color: #1b5e20; /* ירוק כהה יותר */
+  background: linear-gradient(90deg, #81c784, #388e3c); /* מעבר צבע עדין */
+  padding: 2px 6px; /* רווח פנימי */
+  border-radius: 5px; /* פינות מעוגלות */
+  margin-left: 5px; /* ריווח אחרי המילה */
 }
 
 /* Menu items */
@@ -93,17 +136,34 @@ button {
   background-color: #b71c1c;
 }
 
-/* Responsive design */
+/* Responsive design for tablets */
+@media (max-width: 1024px) {
+  .menu-bar {
+    padding: 10px 15px;
+  }
+
+  .menu-items a {
+    font-size: 0.9rem;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+}
+
+/* Responsive design for smartphones */
+/* Responsive design for smartphones */
 @media (max-width: 768px) {
   .menu-bar {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center; /* מרכז אופקי */
+    text-align: center; /* מרכז טקסט */
     padding: 15px;
   }
 
   .menu-items {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center; /* מרכז פריטים אופקי */
     gap: 10px;
   }
 
@@ -111,7 +171,42 @@ button {
     width: 100%;
   }
 
+  .menu-items a {
+    text-align: center; /* מרכז טקסט */
+  }
+
   .logout-button button {
     width: 100%;
+    text-align: center; /* מרכז טקסט */
   }
+
+  .logo {
+    margin-bottom: 10px;
+    text-align: center; /* מרכז טקסט */
+  }
+}
+
+/* Small smartphones */
+@media (max-width: 480px) {
+  .menu-bar {
+    padding: 10px;
+  }
+
+  .menu-items a {
+    font-size: 0.85rem;
+  }
+
+  .logout-button button {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+}
+
+.link-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* רווח בין האייקון לטקסט */
+}
+.menu-icon {
+  font-size: 20px; /* גודל האייקון */
 }

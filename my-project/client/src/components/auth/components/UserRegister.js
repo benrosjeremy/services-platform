@@ -17,19 +17,19 @@ const UserRegister = () => {
   };
 return (
     <div className="auth-container">
-      <h2 className="auth-title">Register User</h2>
+      <h2 className="auth-title">רישום</h2>
       <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
         <input 
           type="text"
           className="form-input"
-          placeholder="First Name" 
+          placeholder="שם פרטי" 
           onChange={(e) => setUser({...user, first_name: e.target.value})}
           value={user.first_name}
         />
         <input 
           type="text"
           className="form-input"
-          placeholder="Last Name" 
+          placeholder="שם  משפחה" 
           onChange={(e) => setUser({...user, last_name: e.target.value})}
           value={user.last_name}
         />
@@ -47,6 +47,7 @@ return (
           onChange={(e) => setUser({...user, password: e.target.value})}
           value={user.password}
         />
+        
         <input 
           type="tel"
           className="form-input"
@@ -55,7 +56,7 @@ return (
           value={user.phone}
         />
         <button className="submit-button" onClick={handleRegister}>
-          Register
+          הירשם
         </button>
       </form>
     </div>

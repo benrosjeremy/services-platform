@@ -171,7 +171,7 @@ const ProviderRegister = () => {
   };
   return (
     <div className="auth-container">
-      <h2 className="auth-title">Register Provider</h2>
+      <h2 className="auth-title">רישום בעל מקצוע</h2>
       <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
         <input
           type="text"
