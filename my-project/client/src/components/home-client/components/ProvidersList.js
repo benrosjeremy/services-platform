@@ -5,7 +5,7 @@ const ProvidersList = ({
   categoryFilter,
   cityFilter,
   onSelectedProvidersChange,
-  resetForm
+  resetForm,
 }) => {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
